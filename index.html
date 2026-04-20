@@ -1561,10 +1561,12 @@ function switchTab(tab, btn) {
   document.getElementById('tab-' + tab).classList.add('active');
   btn.classList.add('active');
   if (tab === 'travel') renderTravelTab();
-  if (tab === 'map') renderMapTab();
+  if (tab === 'map') { renderMapTab(); setTimeout(initGoogleMap, 300); }
 }
 
 // ===== MAP DATA =====
+const GMAPS_KEY = 'AIzaSyAT5Rv7omgai4yBzkT2P6jKt-eqN8R04jo';
+
 const MAP_DAYS = [
   { places: [
     { name: 'Aeropuerto Heathrow', lat: 51.4700, lng: -0.4543, tag: 'Llegada' },
@@ -1646,10 +1648,12 @@ const MAP_DAYS = [
   ]},
 ];
 
-const TAG_COLORS = { 'Pago':'#C8102E', 'Gratis':'#059669', 'Paseo':'#2563eb', 'Compras':'#7c3aed', 'Excursión':'#9333ea', 'Hotel':'#012169', 'Llegada':'#6b7280' };
-const STOP_TAGS  = { 'Pago':'tag-paid', 'Gratis':'tag-free', 'Paseo':'tag-walk', 'Compras':'tag-walk', 'Excursión':'tag-excur', 'Hotel':'tag-walk', 'Llegada':'tag-walk' };
+const TAG_COLORS = { 'Pago':'#C8102E','Gratis':'#059669','Paseo':'#2563eb','Compras':'#7c3aed','Excursión':'#9333ea','Hotel':'#012169','Llegada':'#6b7280' };
+const STOP_TAGS  = { 'Pago':'tag-paid','Gratis':'tag-free','Paseo':'tag-walk','Compras':'tag-walk','Excursión':'tag-excur','Hotel':'tag-walk','Llegada':'tag-walk' };
 
 let currentMapDay = 0;
+let gmapsInstance = null;
+let gmapsLoaded = false;
 
 function getTodayMapDay() {
   const today = new Date(); today.setHours(0,0,0,0);
@@ -1679,17 +1683,6 @@ function renderMapTab() {
   const places  = MAP_DAYS[currentMapDay].places;
   const isToday = !isPreTrip && !isPostTrip && getTodayMapDay() === currentMapDay;
   const mapsUrl = buildGoogleMapsUrl(places);
-
-  // Center of all places
-  const clat = places.reduce((s,p)=>s+p.lat,0)/places.length;
-  const clng = places.reduce((s,p)=>s+p.lng,0)/places.length;
-
-  // Zoom level for OSM embed
-  const zoom = currentMapDay===4 ? 11 : currentMapDay===6 ? 10 : currentMapDay===10 ? 8 : 14;
-
-  // Build OSM iframe URL with marker at center (shows map tiles + area)
-  const osmUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${clng-0.05},${clat-0.03},${clng+0.05},${clat+0.03}&layer=mapnik`;
-
   const dayOptions = DAYS.map((d,i) => `<option value="${i}" ${i===currentMapDay?'selected':''}>${d.label} — ${d.theme}</option>`).join('');
 
   const stopsHtml = places.map((p,i) => `
@@ -1706,7 +1699,6 @@ function renderMapTab() {
       <div class="map-pre-trip-title">¡El viaje comienza el 16 de julio!</div>
       <div class="map-pre-trip-sub">Puedes explorar el recorrido de cada día mientras tanto.</div>
     </div>` : ''}
-
     <div class="map-day-header">
       <div>
         <div class="map-day-title">${dayData.theme}</div>
@@ -1715,35 +1707,140 @@ function renderMapTab() {
       </div>
       <div class="map-day-badge">${dayData.fecha}</div>
     </div>
-
     <div class="map-nav-row">
       <button class="map-nav-btn" onclick="changeMapDay(-1)" ${currentMapDay===0?'disabled':''}>← Anterior</button>
       <select class="map-day-select" onchange="changeMapDay(parseInt(this.value)-currentMapDay)">${dayOptions}</select>
       <button class="map-nav-btn" onclick="changeMapDay(1)" ${currentMapDay===11?'disabled':''}>Siguiente →</button>
     </div>
-
     <div class="map-iframe-wrap">
-      <iframe src="${osmUrl}" style="width:100%;height:380px;border:none;display:block;" loading="lazy" allowfullscreen></iframe>
+      <div id="gmap" style="width:100%;height:400px;border-radius:14px;"></div>
     </div>
-
     <a href="${mapsUrl}" target="_blank" style="
       display:flex;align-items:center;justify-content:center;gap:8px;
       background:var(--navy);color:white;border-radius:12px;
       padding:13px;margin-bottom:12px;text-decoration:none;
-      font-weight:700;font-size:14px;letter-spacing:0.3px;
+      font-weight:700;font-size:14px;
     " onmouseover="this.style.background='#C8102E'" onmouseout="this.style.background='#012169'">
       🗺️ Abrir ruta completa del día en Google Maps
     </a>
-
     <div class="map-stops-list">
       <div class="map-stops-title">📍 Paradas del día — toca para navegar</div>
       ${stopsHtml}
     </div>`;
 }
 
+function initGoogleMap() {
+  const places = MAP_DAYS[currentMapDay].places;
+  const mapDiv = document.getElementById('gmap');
+  if (!mapDiv) return;
+
+  if (!gmapsLoaded) {
+    // Load Google Maps JS API dynamically
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${GMAPS_KEY}&callback=onGmapsReady`;
+    script.async = true;
+    document.head.appendChild(script);
+    gmapsLoaded = true;
+    return;
+  }
+  if (typeof google === 'undefined') return; // Still loading
+  renderGoogleMap(places, mapDiv);
+}
+
+window.onGmapsReady = function() {
+  const places = MAP_DAYS[currentMapDay].places;
+  const mapDiv = document.getElementById('gmap');
+  if (mapDiv) renderGoogleMap(places, mapDiv);
+};
+
+function renderGoogleMap(places, mapDiv) {
+  // Destroy old instance
+  if (gmapsInstance) gmapsInstance = null;
+  mapDiv.innerHTML = '';
+
+  const clat = places.reduce((s,p)=>s+p.lat,0)/places.length;
+  const clng = places.reduce((s,p)=>s+p.lng,0)/places.length;
+  const zoom = currentMapDay===4?11:currentMapDay===6?10:currentMapDay===10?8:14;
+
+  const map = new google.maps.Map(mapDiv, {
+    center: { lat: clat, lng: clng },
+    zoom,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: true,
+    styles: [
+      { featureType:'poi', elementType:'labels', stylers:[{visibility:'off'}] }
+    ]
+  });
+  gmapsInstance = map;
+
+  // Draw route polyline
+  if (places.length > 1) {
+    new google.maps.Polyline({
+      path: places.map(p=>({lat:p.lat,lng:p.lng})),
+      geodesic: true,
+      strokeColor: '#012169',
+      strokeOpacity: 0.7,
+      strokeWeight: 3,
+      map
+    });
+  }
+
+  // Fit bounds
+  const bounds = new google.maps.LatLngBounds();
+
+  // Add numbered markers
+  const infoWindow = new google.maps.InfoWindow();
+  places.forEach((p, i) => {
+    const color = TAG_COLORS[p.tag] || '#012169';
+    const pos = { lat: p.lat, lng: p.lng };
+    bounds.extend(pos);
+
+    const marker = new google.maps.Marker({
+      position: pos,
+      map,
+      label: {
+        text: String(i+1),
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '13px'
+      },
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        fillColor: color,
+        fillOpacity: 1,
+        strokeColor: 'white',
+        strokeWeight: 2.5,
+        scale: 16
+      },
+      title: p.name,
+      zIndex: i + 1
+    });
+
+    marker.addListener('click', () => {
+      infoWindow.setContent(`
+        <div style="font-family:'Source Sans 3',sans-serif;padding:4px;min-width:160px;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px;">${i+1}. ${p.name}</div>
+          <div style="font-size:11px;color:#666;margin-bottom:8px;">${p.tag}</div>
+          <a href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}"
+            target="_blank"
+            style="background:#012169;color:white;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:600;text-decoration:none;display:inline-block;">
+            📍 Navegar aquí
+          </a>
+        </div>`);
+      infoWindow.open(map, marker);
+    });
+  });
+
+  if (places.length > 1) map.fitBounds(bounds, { padding: 40 });
+}
+
 function changeMapDay(delta) {
   currentMapDay = Math.max(0, Math.min(11, currentMapDay + delta));
   renderMapTab();
+  if (typeof google !== 'undefined') {
+    setTimeout(() => renderGoogleMap(MAP_DAYS[currentMapDay].places, document.getElementById('gmap')), 100);
+  }
 }
 
 // ===== TRAVEL DATA =====
