@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇬🇧 London Trip — Julio 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C8102E;
+    --navy: #012169;
+    --gold: #C9A84C;
+    --cream: #FAF7F0;
+    --dark: #0D0D1A;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --white: #ffffff;
+    --border: rgba(1,33,105,0.12);
+    --shadow: 0 4px 24px rgba(1,33,105,0.10);
+    /* Kid mode colors */
+    --kid-bg: #fff8e1;
+    --kid-accent: #ff6b35;
+    --kid-secondary: #4caf50;
+    --kid-purple: #9c27b0;
+    --kid-border: rgba(255,107,53,0.2);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.4s;
+  }
+
+  /* ===== MAXI MODE (naranja) ===== */
+  body.kid-mode {
+    background: #fff8e1;
+  }
+  body.kid-mode .header { background: linear-gradient(135deg, #ff6b35, #ff8c00); }
+  body.kid-mode .header-top { border-bottom-color: #fff; }
+  body.kid-mode .greeting { background: linear-gradient(135deg, #ff6b35 0%, #ff8c00 100%); border-bottom-color: #fff; }
+  body.kid-mode .countdown-section { background: linear-gradient(160deg, #1a0a2e 0%, #ff6b35 50%, #ff8c00 100%); }
+  body.kid-mode .day-btn.active { background: #ff6b35; border-color: #ff6b35; }
+  body.kid-mode .tab-btn.active { color: #ff6b35; border-bottom-color: #ff6b35; }
+  body.kid-mode .day-header::before { background: #ff6b35; }
+  body.kid-mode .day-theme { color: #ff6b35; }
+  body.kid-mode .section-label { color: #ff6b35; }
+  body.kid-mode .food-title { color: #ff6b35; }
+  body.kid-mode .tips-title { color: #ff6b35; }
+  body.kid-mode .costs-card { background: linear-gradient(135deg, #ff6b35, #ff8c00); }
+  body.kid-mode .map-btn { background: #ff6b35; }
+  body.kid-mode .map-btn:hover { background: #e55a00; }
+  body.kid-mode .kid-tip-card { background: rgba(255,107,53,0.07); border-color: rgba(255,107,53,0.3); }
+  body.kid-mode .kid-tip-title { color: #ff6b35; }
+
+  /* ===== ELENA MODE (rosa / morado) ===== */
+  body.elena-mode {
+    background: #fdf4ff;
+  }
+  body.elena-mode .header { background: linear-gradient(135deg, #c026d3, #7c3aed); }
+  body.elena-mode .header-top { border-bottom-color: #f9a8d4; }
+  body.elena-mode .greeting { background: linear-gradient(135deg, #c026d3 0%, #7c3aed 100%); border-bottom-color: #f9a8d4; }
+  body.elena-mode .countdown-section { background: linear-gradient(160deg, #1a0a2e 0%, #7c3aed 40%, #c026d3 100%); }
+  body.elena-mode .day-btn.active { background: #c026d3; border-color: #c026d3; }
+  body.elena-mode .tab-btn.active { color: #c026d3; border-bottom-color: #c026d3; }
+  body.elena-mode .day-header::before { background: linear-gradient(180deg, #c026d3, #7c3aed); }
+  body.elena-mode .day-theme { color: #9333ea; }
+  body.elena-mode .section-label { color: #c026d3; }
+  body.elena-mode .food-title { color: #c026d3; }
+  body.elena-mode .tips-title { color: #9333ea; }
+  body.elena-mode .costs-card { background: linear-gradient(135deg, #c026d3, #7c3aed); }
+  body.elena-mode .map-btn { background: #9333ea; }
+  body.elena-mode .map-btn:hover { background: #c026d3; }
+  body.elena-mode .day-header { border-color: rgba(192,38,211,0.2); background: linear-gradient(135deg, #fff, #fdf4ff); }
+  body.elena-mode .activity-card.kid-highlight { border-color: rgba(192,38,211,0.45) !important; background: rgba(253,244,255,0.9) !important; }
+  body.elena-mode .kid-star { background: linear-gradient(135deg, #c026d3, #7c3aed); }
+  body.elena-mode .kid-tip-card { background: rgba(192,38,211,0.06); border-color: rgba(192,38,211,0.3); }
+  body.elena-mode .kid-tip-title { color: #c026d3; }
+  body.elena-mode .tips-card { background: rgba(192,38,211,0.05); border-color: rgba(192,38,211,0.2); }
+  body.elena-mode .day-progress-fill { background: linear-gradient(90deg, #c026d3, #a855f7); }
+
+  /* Person btn Elena */
+  body.elena-mode .person-btn.kid-btn.active { background: linear-gradient(135deg, #c026d3, #7c3aed); border-color: #c026d3; }
+
+  /* Kid mode floating elements */
+  .kid-floats {
+    display: none;
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    inset: 0;
+    overflow: hidden;
+  }
+  body.kid-mode .kid-floats,
+  body.elena-mode .kid-floats { display: block; }
+
+  .kid-float {
+    position: absolute;
+    font-size: 28px;
+    animation: kidFloat var(--dur, 8s) ease-in-out infinite var(--delay, 0s);
+    opacity: 0.12;
+  }
+  @keyframes kidFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    33% { transform: translateY(-20px) rotate(10deg); }
+    66% { transform: translateY(10px) rotate(-5deg); }
+  }
+
+  /* Kid activity highlight — Maxi */
+  .activity-card.kid-highlight {
+    border-color: rgba(255,107,53,0.5) !important;
+    background: rgba(255,249,230,0.8) !important;
+  }
+  body.kid-mode .activity-card:not(.kid-highlight),
+  body.elena-mode .activity-card:not(.kid-highlight) {
+    opacity: 0.55;
+    filter: grayscale(0.3);
+  }
+  body.kid-mode .activity-card.kid-highlight,
+  body.elena-mode .activity-card.kid-highlight { opacity: 1; filter: none; }
+
+  .kid-star {
+    display: none;
+    background: linear-gradient(135deg, #ff6b35, #ff8c00);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  body.kid-mode .activity-card.kid-highlight .kid-star,
+  body.elena-mode .activity-card.kid-highlight .kid-star { display: inline-flex; align-items: center; gap: 3px; }
+
+  /* Kid mode banner */
+  .kid-mode-banner {
+    display: none;
+    background: linear-gradient(90deg, #ff6b35, #ff8c00, #ffd700);
+    color: white;
+    text-align: center;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    animation: kidBannerPulse 2s ease-in-out infinite;
+  }
+  body.kid-mode .kid-mode-banner { display: block; }
+  body.elena-mode .kid-mode-banner {
+    display: block;
+    background: linear-gradient(90deg, #c026d3, #9333ea, #e879f9, #7c3aed);
+    background-size: 200% 100%;
+    animation: elenaBannerShimmer 3s linear infinite;
+  }
+  @keyframes elenaBannerShimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+  @keyframes kidBannerPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+  }
+
+  /* Elena sparkle on kid-highlight border */
+  body.elena-mode .activity-card.kid-highlight::after {
+    content: '✨';
+    position: absolute;
+    top: 8px; right: 44px;
+    font-size: 14px;
+    pointer-events: none;
+    animation: sparkle 2s ease-in-out infinite;
+  }
+  @keyframes sparkle {
+    0%, 100% { opacity: 0.4; transform: scale(0.8) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.1) rotate(15deg); }
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--navy);
+    color: white;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    transition: background 0.4s;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    border-bottom: 3px solid var(--red);
+  }
+
+  .header-title { display: flex; align-items: center; gap: 12px; }
+  .header-title .flag { font-size: 24px; }
+  .header-title h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+  }
+  .header-title span {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 300;
+    display: block;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .header-subtitle {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  /* PERSON SELECTOR */
+  .person-bar {
+    background: var(--dark);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .person-bar::-webkit-scrollbar { display: none; }
+  .person-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .person-btn {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    background: transparent;
+    color: rgba(255,255,255,0.6);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .person-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .person-btn.active { background: var(--gold); border-color: var(--gold); color: var(--dark); }
+  .person-btn.kid-btn { border-color: rgba(255,107,53,0.5); }
+  .person-btn.kid-btn:hover { border-color: var(--kid-accent); color: var(--kid-accent); }
+  .person-btn.kid-btn.active { background: var(--kid-accent); border-color: var(--kid-accent); color: white; }
+  .kid-indicator {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 14px;
+    height: 14px;
+    background: var(--kid-accent);
+    border-radius: 50%;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--dark);
+  }
+  .person-divider {
+    width: 1px;
+    height: 24px;
+    background: rgba(255,255,255,0.15);
+    flex-shrink: 0;
+    margin: 0 4px;
+  }
+  .family-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* GREETING */
+  .greeting {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a3a7a 100%);
+    color: white;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 4px solid var(--red);
+    transition: background 0.4s;
+  }
+  .greeting-text h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1.1;
+  }
+  .greeting-text p { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; letter-spacing: 0.5px; }
+  .progress-wrap { text-align: right; }
+  .progress-pct {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .progress-label { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* DAY SELECTOR */
+  .day-nav {
+    padding: 16px 24px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    display: flex;
+    gap: 8px;
+  }
+  .day-nav::-webkit-scrollbar { display: none; }
+  .day-btn {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: white;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    min-width: 70px;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .day-btn:hover { border-color: var(--navy); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .day-btn.active { background: var(--navy); border-color: var(--navy); color: white; box-shadow: 0 4px 12px rgba(1,33,105,0.3); }
+  .day-btn .day-num { font-size: 18px; font-weight: 700; font-family: 'Playfair Display', serif; display: block; }
+  .day-btn .day-date { font-size: 10px; opacity: 0.6; letter-spacing: 0.5px; }
+  .day-btn.active .day-date { opacity: 0.7; }
+
+  /* MAIN CONTENT */
+  .main { padding: 20px 24px; max-width: 720px; margin: 0 auto; }
+
+  /* DAY HEADER */
+  .day-header {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 2px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .day-header::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 5px;
+    background: var(--red);
+    border-radius: 4px 0 0 4px;
+  }
+  .day-header-inner { padding-left: 12px; }
+  .day-header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .day-theme { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--navy); line-height: 1.2; }
+  .day-badge { background: var(--red); color: white; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; white-space: nowrap; letter-spacing: 0.5px; flex-shrink: 0; }
+  .day-meta { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; }
+  .day-meta-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); }
+  .day-progress-bar { margin-top: 12px; height: 5px; background: rgba(1,33,105,0.08); border-radius: 10px; overflow: hidden; }
+  .day-progress-fill { height: 100%; background: linear-gradient(90deg, var(--red), var(--gold)); border-radius: 10px; transition: width 0.5s ease; }
+
+  /* ACTIVITY CARD */
+  .activity-card {
+    background: white;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    border: 2px solid var(--border);
+    transition: all 0.25s;
+    overflow: hidden;
+  }
+  .activity-card:hover { border-color: rgba(1,33,105,0.25); box-shadow: var(--shadow); }
+  .activity-card.done { border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.04); }
+  .activity-main { display: flex; align-items: flex-start; padding: 14px 16px; gap: 12px; cursor: pointer; }
+  .check-btn {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 2.5px solid rgba(1,33,105,0.25);
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    margin-top: 1px;
+  }
+  .check-btn:hover { border-color: #10b981; background: rgba(16,185,129,0.1); }
+  .activity-card.done .check-btn { background: #10b981; border-color: #10b981; color: white; }
+  .check-icon { display: none; font-size: 13px; }
+  .activity-card.done .check-icon { display: block; }
+  .check-empty { display: block; }
+  .activity-card.done .check-empty { display: none; }
+  .activity-content { flex: 1; min-width: 0; }
+  .activity-name { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .activity-card.done .activity-name { text-decoration: line-through; color: var(--muted); }
+  .activity-meta { display: flex; gap: 8px; margin-top: 5px; flex-wrap: wrap; align-items: center; }
+  .act-tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 500; letter-spacing: 0.3px; }
+  .tag-free { background: rgba(16,185,129,0.12); color: #059669; }
+  .tag-paid { background: rgba(200,16,46,0.10); color: var(--red); }
+  .tag-food { background: rgba(201,168,76,0.15); color: #92600a; }
+  .tag-walk { background: rgba(59,130,246,0.10); color: #2563eb; }
+  .tag-excur { background: rgba(139,92,246,0.10); color: #7c3aed; }
+  .act-expand-btn {
+    background: none; border: none; padding: 4px;
+    cursor: pointer; color: var(--muted); flex-shrink: 0;
+    transition: transform 0.2s; font-size: 18px; line-height: 1;
+  }
+  .act-expand-btn.open { transform: rotate(180deg); }
+  .activity-detail { display: none; padding: 0 16px 14px 54px; border-top: 1px solid var(--border); padding-top: 12px; }
+  .activity-detail.open { display: block; }
+  .detail-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .detail-icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+  .detail-text { color: var(--text); opacity: 0.85; }
+  .map-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 8px; padding: 7px 14px;
+    background: var(--navy); color: white; border: none;
+    border-radius: 8px; font-size: 12px; font-weight: 600;
+    cursor: pointer; text-decoration: none; letter-spacing: 0.3px;
+    transition: all 0.2s; font-family: 'Source Sans 3', sans-serif;
+  }
+  .map-btn:hover { background: var(--red); transform: translateY(-1px); }
+
+  /* COSTS */
+  .costs-card { background: var(--navy); color: white; border-radius: 14px; padding: 16px 20px; margin-bottom: 10px; transition: background 0.4s; }
+  .costs-title { font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; font-weight: 600; }
+  .costs-amount { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--gold); }
+  .costs-note { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+  /* FOOD CARD */
+  .food-card { background: white; border-radius: 14px; padding: 16px; margin-bottom: 10px; border: 2px solid var(--border); }
+  .food-title { font-size: 12px; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .food-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text); margin-bottom: 6px; line-height: 1.5; }
+  .food-emoji { flex-shrink: 0; font-size: 15px; }
+
+  /* TIPS */
+  .tips-card { background: rgba(201,168,76,0.08); border: 2px solid rgba(201,168,76,0.3); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; }
+  .tips-title { font-size: 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .tip-text { font-size: 13px; color: var(--text); line-height: 1.6; opacity: 0.85; }
+
+  /* KID TIP */
+  .kid-tip-card { background: rgba(255,107,53,0.07); border: 2px solid rgba(255,107,53,0.3); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; display: none; }
+  body.kid-mode .kid-tip-card { display: block; }
+  .kid-tip-title { font-size: 12px; font-weight: 700; color: var(--kid-accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .kid-tip-text { font-size: 13px; color: var(--text); line-height: 1.6; opacity: 0.9; }
+
+  /* SECTION LABEL */
+  .section-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin: 20px 0 8px; }
+
+  /* OVERVIEW TAB */
+  .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-card { background: white; border-radius: 14px; padding: 16px; border: 2px solid var(--border); text-align: center; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: var(--navy); line-height: 1; display: block; }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; font-weight: 400; }
+  .full-width { grid-column: 1 / -1; }
+
+  /* FAMILY BUDGET CARDS */
+  .budget-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .budget-family-card { background: white; border-radius: 14px; padding: 16px; border: 2px solid var(--border); }
+  .budget-family-name { font-size: 12px; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .budget-amount { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--red); line-height: 1; }
+  .budget-breakdown { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+  .budget-total-card { background: var(--navy); color: white; border-radius: 14px; padding: 16px 20px; margin-bottom: 10px; }
+  .budget-total-label { font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; }
+  .budget-total-amount { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--gold); }
+  .budget-total-note { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+  /* RESERVE */
+  .reserve-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .reserve-item:last-child { border-bottom: none; }
+  .urgency-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .urg-critical { background: var(--red); }
+  .urg-high { background: #f59e0b; }
+  .urg-med { background: #3b82f6; }
+  .reserve-name { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .reserve-when { font-size: 12px; color: var(--muted); }
+  .reserve-link {
+    margin-left: auto; flex-shrink: 0;
+    font-size: 11px; font-weight: 600; color: var(--navy); text-decoration: none;
+    padding: 4px 10px; border: 1.5px solid var(--navy); border-radius: 6px; transition: all 0.2s;
+  }
+  .reserve-link:hover { background: var(--navy); color: white; }
+
+  /* NAV TABS */
+  .tabs { display: flex; gap: 0; background: white; border-bottom: 2px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    padding: 12px 18px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px; font-weight: 600; color: var(--muted);
+    border: none; background: transparent; cursor: pointer;
+    white-space: nowrap; border-bottom: 3px solid transparent;
+    margin-bottom: -2px; transition: all 0.2s; letter-spacing: 0.3px;
+  }
+  .tab-btn.active { color: var(--navy); border-bottom-color: var(--red); }
+  .tab-btn:hover { color: var(--navy); }
+
+  /* VIEWS */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 30px 24px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 20px; }
+
+  /* ===== COUNTDOWN ===== */
+  .countdown-section {
+    background: linear-gradient(160deg, #0a1628 0%, #012169 50%, #1a0a2e 100%);
+    padding: 28px 24px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+  }
+  .countdown-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(200,16,46,0.08) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .countdown-stars { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .star { position: absolute; width: 3px; height: 3px; background: white; border-radius: 50%; animation: twinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s); opacity: 0; }
+  @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.5); } 50% { opacity: var(--max-op, 0.6); transform: scale(1); } }
+  .countdown-top { position: relative; z-index: 1; text-align: center; margin-bottom: 20px; }
+  .countdown-emoji-big { font-size: 48px; display: block; margin-bottom: 6px; animation: bounce 2s ease-in-out infinite; }
+  @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .countdown-title { font-family: 'Playfair Display', serif; font-size: 15px; color: rgba(255,255,255,0.7); letter-spacing: 2px; text-transform: uppercase; font-weight: 400; }
+  .countdown-numbers { position: relative; z-index: 1; display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .cd-unit { background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.15); border-radius: 14px; padding: 14px 16px; text-align: center; min-width: 72px; backdrop-filter: blur(4px); transition: transform 0.3s; }
+  .cd-unit:hover { transform: scale(1.05); }
+  .cd-num { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 900; color: var(--gold); line-height: 1; display: block; animation: numPop 0.4s ease; }
+  @keyframes numPop { 0% { transform: scale(1.3); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
+  .cd-label { font-size: 10px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 4px; font-weight: 600; }
+  .cd-sep { font-size: 32px; color: rgba(255,255,255,0.2); font-weight: 300; align-self: center; margin-top: -8px; }
+  .countdown-phrase { position: relative; z-index: 1; text-align: center; font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: white; margin-bottom: 20px; padding: 0 16px; line-height: 1.4; min-height: 52px; }
+  .countdown-phrase span { display: inline-block; animation: fadeSlide 0.6s ease forwards; }
+  @keyframes fadeSlide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .daily-tip { position: relative; z-index: 1; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(201,168,76,0.3); border-radius: 14px; padding: 14px 16px; margin-bottom: 4px; }
+  .daily-tip-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .tip-badge { background: var(--gold); color: var(--dark); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; letter-spacing: 1px; text-transform: uppercase; }
+  .tip-day-label { font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 0.5px; }
+  .daily-tip-text { font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.6; }
+  .daily-tip-text strong { color: var(--gold); font-weight: 600; }
+  .trip-progress-wrap { position: relative; z-index: 1; margin-top: 16px; }
+  .trip-progress-labels { display: flex; justify-content: space-between; font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .trip-progress-track { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+  .trip-progress-fill { height: 100%; background: linear-gradient(90deg, var(--red), var(--gold)); border-radius: 10px; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+  .trip-progress-fill::after { content: '✈️'; position: absolute; right: -10px; top: -8px; font-size: 16px; filter: drop-shadow(0 0 4px rgba(201,168,76,0.6)); }
+  .confetti-piece { position: fixed; width: 8px; height: 8px; border-radius: 2px; animation: confettiFall var(--dur) ease-in forwards; pointer-events: none; z-index: 9999; }
+  @keyframes confettiFall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+  .milestones { position: relative; z-index: 1; display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; justify-content: center; }
+  .milestone { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 600; letter-spacing: 0.3px; border: 1.5px solid; transition: all 0.3s; }
+  .milestone.reached { background: rgba(201,168,76,0.2); border-color: var(--gold); color: var(--gold); }
+  .milestone.pending { background: transparent; border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.3); }
+
+  /* ===== VUELOS & HOTEL TAB ===== */
+  .travel-section-label {
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 1.5px; margin: 24px 0 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .travel-section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* HOTEL CARD */
+  .hotel-card {
+    background: var(--navy); color: white;
+    border-radius: 16px; padding: 20px; margin-bottom: 12px;
+    position: relative; overflow: hidden;
+  }
+  .hotel-card::before {
+    content: '🏨';
+    position: absolute; right: 16px; top: 16px;
+    font-size: 36px; opacity: 0.15;
+  }
+  .hotel-badge {
+    background: var(--gold); color: var(--dark);
+    font-size: 10px; font-weight: 700; padding: 3px 10px;
+    border-radius: 20px; letter-spacing: 1px; text-transform: uppercase;
+    display: inline-block; margin-bottom: 10px;
+  }
+  .hotel-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 700; line-height: 1.2; margin-bottom: 4px;
+  }
+  .hotel-collection {
+    font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 14px;
+  }
+  .hotel-details-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;
+  }
+  .hotel-detail-item { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 10px 12px; }
+  .hotel-detail-label { font-size: 10px; color: rgba(255,255,255,0.45); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+  .hotel-detail-value { font-size: 14px; font-weight: 600; color: white; }
+  .hotel-detail-value.gold { color: var(--gold); }
+  .hotel-info-row {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 12px; color: rgba(255,255,255,0.65); margin-bottom: 6px; line-height: 1.5;
+  }
+  .hotel-info-icon { flex-shrink: 0; font-size: 13px; }
+  .hotel-map-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 10px; padding: 8px 16px;
+    background: rgba(255,255,255,0.12); color: white; border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 8px; font-size: 12px; font-weight: 600;
+    cursor: pointer; text-decoration: none; letter-spacing: 0.3px;
+    transition: all 0.2s; font-family: 'Source Sans 3', sans-serif;
+  }
+  .hotel-map-btn:hover { background: var(--gold); border-color: var(--gold); color: var(--dark); }
+
+  /* FAMILY FLIGHT BLOCK */
+  .family-flights-block {
+    background: white; border-radius: 16px; margin-bottom: 12px;
+    border: 2px solid var(--border); overflow: hidden;
+  }
+  .family-flights-header {
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .family-flights-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; font-weight: 700; color: var(--navy);
+  }
+  .family-flights-meta { font-size: 11px; color: var(--muted); margin-left: auto; }
+  .family-confirmed-badge {
+    font-size: 10px; font-weight: 700; padding: 2px 8px;
+    border-radius: 10px; letter-spacing: 0.5px; white-space: nowrap;
+  }
+  .badge-confirmed { background: rgba(16,185,129,0.12); color: #059669; }
+  .badge-pending { background: rgba(245,158,11,0.12); color: #d97706; }
+
+  /* PASSENGER FLIGHT CARD */
+  .passenger-block { padding: 0; }
+  .passenger-header {
+    padding: 12px 16px 8px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .passenger-header:last-of-type { border-bottom: none; }
+  .passenger-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+  .avatar-adult { background: rgba(1,33,105,0.1); color: var(--navy); }
+  .avatar-child { background: rgba(255,107,53,0.15); color: var(--kid-accent); }
+  .passenger-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .passenger-type { font-size: 11px; color: var(--muted); }
+  .passenger-locator {
+    margin-left: auto; font-size: 10px; font-weight: 700;
+    color: var(--navy); background: rgba(1,33,105,0.07);
+    padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px;
+  }
+  .passenger-locator.miles { background: rgba(201,168,76,0.15); color: #92600a; }
+
+  /* FLIGHT SEGMENT */
+  .flight-segments { padding: 0 16px 14px; }
+  .flight-segment {
+    background: rgba(250,247,240,0.8); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;
+  }
+  .flight-segment:last-child { margin-bottom: 0; }
+  .flight-seg-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .flight-seg-num {
+    font-size: 11px; font-weight: 700; color: var(--red);
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .flight-seg-code {
+    font-size: 12px; font-weight: 700; color: var(--navy);
+    background: rgba(1,33,105,0.08); padding: 2px 8px; border-radius: 6px;
+  }
+  .flight-seg-code.miles-flight { background: rgba(201,168,76,0.15); color: #92600a; }
+  .flight-route {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+  }
+  .flight-city { text-align: center; flex: 1; }
+  .flight-city-code { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--navy); line-height: 1; }
+  .flight-city-name { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; margin-top: 2px; }
+  .flight-arrow {
+    flex: 2; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  .flight-arrow-line {
+    width: 100%; height: 1.5px; background: var(--border);
+    position: relative; display: flex; align-items: center; justify-content: center;
+  }
+  .flight-arrow-line::after { content: '✈'; font-size: 14px; color: var(--navy); background: white; padding: 0 4px; }
+  .flight-duration { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; }
+  .flight-times {
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: var(--muted);
+  }
+  .flight-time-block { text-align: center; }
+  .flight-time { font-size: 15px; font-weight: 700; color: var(--text); display: block; line-height: 1.1; }
+  .flight-date { font-size: 10px; color: var(--muted); }
+  .flight-seat-row {
+    display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;
+  }
+  .flight-tag {
+    font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 600; letter-spacing: 0.3px;
+  }
+  .ft-seat { background: rgba(59,130,246,0.1); color: #2563eb; }
+  .ft-bag { background: rgba(16,185,129,0.1); color: #059669; }
+  .ft-fare { background: rgba(107,114,128,0.1); color: #4b5563; }
+  .ft-miles { background: rgba(201,168,76,0.15); color: #92600a; }
+
+  /* PENDING PLACEHOLDER */
+  .pending-placeholder {
+    background: repeating-linear-gradient(
+      45deg, rgba(245,158,11,0.04), rgba(245,158,11,0.04) 10px,
+      rgba(255,255,255,0.5) 10px, rgba(255,255,255,0.5) 20px
+    );
+    border: 2px dashed rgba(245,158,11,0.4);
+    border-radius: 14px; padding: 20px; text-align: center; margin-bottom: 12px;
+  }
+  .pending-icon { font-size: 32px; margin-bottom: 8px; }
+  .pending-title { font-size: 15px; font-weight: 700; color: #92600a; margin-bottom: 4px; }
+  .pending-subtitle { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* MOBILE */
+  @media (max-width: 600px) {
+    .header-top { padding: 12px 16px; }
+    .main { padding: 16px; }
+    .day-nav { padding: 12px 16px 0; }
+    .person-bar { padding: 10px 16px; }
+    .greeting { padding: 16px; flex-direction: column; gap: 12px; align-items: flex-start; }
+    .progress-wrap { align-self: flex-start; }
+    .overview-grid { grid-template-columns: 1fr 1fr; }
+    .budget-grid { grid-template-columns: 1fr; }
+    .hotel-details-grid { grid-template-columns: 1fr 1fr; }
+    .flight-city-code { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- KID FLOATING ELEMENTS -->
+<div class="kid-floats" id="kidFloats"></div>
+
+<!-- KID MODE BANNER -->
+<div class="kid-mode-banner" id="kidBanner">🧒 MODO NIÑOS ACTIVADO — Actividades TOP para Maxi y Elena resaltadas ⭐</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-top">
+    <div class="header-title">
+      <span class="flag">🇬🇧</span>
+      <div>
+        <h1>London Trip</h1>
+        <span>15 – 27 Julio 2026 · 12 días</span>
+      </div>
+    </div>
+    <div class="header-subtitle">2 Familias · 6 Viajeros</div>
+  </div>
+  <div class="person-bar">
+    <span class="person-label">Viajero:</span>
+    <button class="person-btn active" onclick="selectPerson('todos', this)">Todos</button>
+
+    <div class="person-divider"></div>
+    <span class="family-label">Parra</span>
+    <button class="person-btn" onclick="selectPerson('Camilo', this)">Camilo</button>
+    <button class="person-btn" onclick="selectPerson('Catalina', this)">Catalina</button>
+    <button class="person-btn kid-btn" onclick="selectPerson('Maxi', this)">
+      Maxi 🧒
+      <span class="kid-indicator">⭐</span>
+    </button>
+
+    <div class="person-divider"></div>
+    <span class="family-label">Valencia</span>
+    <button class="person-btn" onclick="selectPerson('Santiago', this)">Santiago</button>
+    <button class="person-btn" onclick="selectPerson('Camila', this)">Camila</button>
+    <button class="person-btn kid-btn" onclick="selectPerson('Elena', this)">
+      Elena 🧒
+      <span class="kid-indicator">⭐</span>
+    </button>
+  </div>
+</header>
+
+<!-- GREETING -->
+<div class="greeting" id="greetingBanner">
+  <div class="greeting-text">
+    <h2 id="greetingName">¡Bienvenidos, Familias Parra & Valencia! 🎉</h2>
+    <p id="greetingSubtitle">Londres en 12 días — julio 2026</p>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-pct" id="globalPct">0%</div>
+    <div class="progress-label">Completado</div>
+  </div>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="countdown-section" id="countdownSection">
+  <div class="countdown-stars" id="countdownStars"></div>
+  <div class="countdown-top">
+    <span class="countdown-emoji-big" id="cdEmoji">🇬🇧</span>
+    <div class="countdown-title">Faltan para Londres…</div>
+  </div>
+  <div class="countdown-numbers">
+    <div class="cd-unit"><span class="cd-num" id="cd-days">--</span><div class="cd-label">Días</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-unit"><span class="cd-num" id="cd-hours">--</span><div class="cd-label">Horas</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-unit"><span class="cd-num" id="cd-mins">--</span><div class="cd-label">Minutos</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-unit"><span class="cd-num" id="cd-secs">--</span><div class="cd-label">Segundos</div></div>
+  </div>
+  <div class="countdown-phrase"><span id="cdPhrase">Calculando…</span></div>
+  <div class="daily-tip" id="dailyTipBox">
+    <div class="daily-tip-header">
+      <span class="tip-badge">💡 Tip del día</span>
+      <span class="tip-day-label" id="tipDayLabel"></span>
+    </div>
+    <div class="daily-tip-text" id="dailyTipText">Cargando…</div>
+  </div>
+  <div class="milestones" id="milestonesRow"></div>
+  <div class="trip-progress-wrap">
+    <div class="trip-progress-labels">
+      <span>Hoy</span>
+      <span id="progressLabel">0% del camino</span>
+      <span>¡Londres! 🎉</span>
+    </div>
+    <div class="trip-progress-track">
+      <div class="trip-progress-fill" id="tripProgressFill" style="width:0%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<nav class="tabs">
+  <button class="tab-btn active" onclick="switchTab('itinerary', this)">📅 Itinerario</button>
+  <button class="tab-btn" onclick="switchTab('overview', this)">📊 Resumen</button>
+  <button class="tab-btn" onclick="switchTab('reserve', this)">⚠️ Reservas</button>
+  <button class="tab-btn" onclick="switchTab('travel', this)">✈️ Vuelos & Hotel</button>
+</nav>
+
+<!-- TAB: ITINERARY -->
+<div id="tab-itinerary" class="view active">
+  <div class="day-nav" id="dayNav"></div>
+  <div class="main" id="dayContent"></div>
+</div>
+
+<!-- TAB: OVERVIEW -->
+<div id="tab-overview" class="view">
+  <div class="main">
+    <div class="section-label">Estadísticas del viaje</div>
+    <div class="overview-grid">
+      <div class="stat-card"><span class="stat-num" id="ov-days">12</span><div class="stat-label">Días en Londres</div></div>
+      <div class="stat-card"><span class="stat-num" id="ov-acts">0</span><div class="stat-label">Actividades totales</div></div>
+      <div class="stat-card"><span class="stat-num" id="ov-done">0</span><div class="stat-label">Completadas</div></div>
+      <div class="stat-card"><span class="stat-num" id="ov-pct">0%</span><div class="stat-label">% del viaje</div></div>
+    </div>
+
+    <div class="section-label" style="margin-top:24px">Presupuesto entradas — por familia</div>
+    <div class="budget-grid">
+      <div class="budget-family-card">
+        <div class="budget-family-name">🏠 Familia Parra</div>
+        <div class="budget-amount">£911</div>
+        <div class="budget-breakdown">Camilo + Catalina + Maxi (9 años)</div>
+      </div>
+      <div class="budget-family-card">
+        <div class="budget-family-name">🏠 Familia Valencia</div>
+        <div class="budget-amount">£911</div>
+        <div class="budget-breakdown">Santiago + Camila + Elena (9 años)</div>
+      </div>
+    </div>
+    <div class="budget-total-card">
+      <div class="budget-total-label">Total ambas familias — entradas</div>
+      <div class="budget-total-amount">£1,822</div>
+      <div class="budget-total-note">Harry Potter £314 · London Eye £210 · Torre de Londres £185 · Stonehenge+Bath £714 · Greenwich £160 · Propinas free tours £240</div>
+    </div>
+
+    <div class="section-label">Consejos para julio</div>
+    <div class="tips-card">
+      <div class="tips-title">☀️ Julio en Londres</div>
+      <div class="tip-text">🌤️ Días largos: amanecer 05:00, anochecer 21:00 — aprovechen la luz natural<br><br>
+      🌡️ Temperatura agradable: 18–26°C — ropa ligera + impermeable ligero<br><br>
+      📸 Cambio de Guardia: verificar calendario antes del viaje — llegar 45 min antes<br><br>
+      🚇 Oyster Card o contactless — mucho más barato que comprar billetes individuales<br><br>
+      🍔 "Kids Eat Free" en julio (vacaciones escolares UK): PizzaExpress, Bill's, Giraffe, Bella Italia<br><br>
+      🧴 Protector solar y botella de agua rellenable — agua gratis en fuentes y museos</div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: RESERVAS -->
+<div id="tab-reserve" class="view">
+  <div class="main">
+    <div class="section-label">Reservas prioritarias — ¡No dejar para después!</div>
+    <div class="food-card">
+      <div class="food-title">Estado de reservas</div>
+      <div id="reserveList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: VUELOS & HOTEL -->
+<div id="tab-travel" class="view">
+  <div class="main" id="travelContent"></div>
+</div>
+
+<div class="footer">
+  🇬🇧 London Trip · Julio 2026 · Familia Parra (Camilo, Catalina & Maxi) · Familia Valencia (Santiago, Camila & Elena)
+</div>
+
+<script>
+// ===== KIDS ACTIVITIES MAP =====
+// Activities marked as kid-highlight (best for 9-year-olds)
+const KID_ACTIVITIES = {
+  // dayIndex: [activityIndexes]
+  0: [2],           // Paseo de reconocimiento
+  1: [0,1,2,3,4],   // London Eye, Aquarium, Big Ben, St James's, Buckingham
+  2: [0,1],         // Harry Potter, Wembley
+  3: [0,1,2],       // Natural History, Science, Harrods
+  4: [0,1,2,3],     // Torre, Tower Bridge, HMS Belfast, Sky Garden
+  5: [1,2,3,4],     // Diana Playground, Serpentine, Notting Hill, Portobello
+  6: [0,1,2,3],     // Platform 9¾, Oxford, Christ Church, Bodleian
+  7: [0,1,2],       // British Museum, Oxford St, Hamleys
+  8: [1,2,3,4,5,6], // Trafalgar, Piccadilly, Transport Museum, Covent Garden, LEGO/M&M, Chinatown
+  9: [0,1,2,3],     // Thames Clipper, Cutty Sark, Observatory, Maritime Museum
+  10: [0,1,2],      // Stonehenge, Roman Baths, Bath
+  11: [0,1,2,3,4],  // Paddington, Little Venice, Tussauds, Camden, Regent's Park
+};
+
+// Kid-specific tips per day
+const KID_TIPS = [
+  "🧒 Maxi y Elena: ¡Esta noche coman en Nando's! Los niños piden su propio menú y adoran los colores de la decoración. Dígales que mañana empieza la aventura.",
+  "⭐ Para los peques: el London Eye tarda 30 minutos en dar una vuelta completa — pueden ir buscando los lugares que reconocen desde arriba. ¿Cuántos puentes del Támesis ven?",
+  "🧙 ¡El DÍA MÁS ESPERADO de Maxi y Elena! En el Warner Bros. Studio pueden ver la cama de Harry bajo la escalera, tocar los Horrocruxes y tomar un Butterbeer frío. ¡Lleguen a las 10am para aprovechar todo!",
+  "🦕 En el Natural History Museum hay un esqueleto gigante de diplodocus en la entrada principal. Reto para los niños: ¿cuántos huesos distintos de dinosaurio encuentran en la sala de dinos?",
+  "👑 Las Joyas de la Corona en la Torre de Londres son lo más impresionante — la corona tiene más de 3,000 diamantes. ¡Cuenten los guardias Beefeater que encuentran!",
+  "🛶 El bote en The Serpentine es ÉPICO para los niños — pueden remar ellos mismos (con ayuda). Y el Diana Playground tiene un barco pirata de madera enorme. Lleven ropa para mojar.",
+  "🚂 En la plataforma 9¾ hay un carrito mágico atravesando la pared — la foto oficial sale perfecta. Recuerden comprar algo en la tienda oficial de Harry Potter dentro de King's Cross.",
+  "🧸 Hamleys es LA juguetería más antigua del mundo (desde 1760). Tip de supervivencia: pongan un límite de £20 por niño para souvenir antes de entrar. Los 7 pisos son abrumadores.",
+  "🎪 En Covent Garden hay magos, acróbatas y músicos en la plaza — es gratis y los niños quedan fascinados. Lleven monedas para la propina al artista que más les guste.",
+  "🚢 En el DLR (tren sin conductor de Greenwich), siéntense en la primera fila del primer vagón — ¡los niños quedan flipados porque parece que manejan el tren! Es la experiencia favorita de muchos niños.",
+  "🗿 Stonehenge: cuenten las piedras con los niños — hay 83 en total. Y en Bath, busquen en las termas romanas la moneda más antigua que vean. ¡Tienen 2,000 años!",
+  "🐻 La estatua de Paddington en la estación está escondida en un rincón especial — ¡busquen al oso! Y Camden Market tiene arepas colombianas. Los niños pueden comer 'comida de casa' en Londres."
+];
+
+const DAYS = [
+  {
+    num: 1, fecha: "Jul 16", label: "16 Jul", theme: "Hola Londres",
+    badge: "Llegada",
+    activities: [
+      { name: "Llegada al aeropuerto Heathrow", tag: "walk", note: "Aterrizaje y proceso de inmigración", metro: "Heathrow T2-5 (Piccadilly Line)", map: "https://maps.google.com/?q=Heathrow+Airport+London" },
+      { name: "Traslado al hotel — zona Kensington / Earl's Court", tag: "walk", note: "Hotel en línea Piccadilly, muy conveniente para todo el viaje", metro: "Earl's Court (District/Piccadilly)", map: "https://maps.google.com/?q=Earl%27s+Court+London" },
+      { name: "Paseo de reconocimiento del barrio + Oyster Cards", tag: "free", note: "Earl's Court Road — orientarse, comprar Oyster Cards en la estación. ¡Primer contacto con Londres!", map: "https://maps.google.com/?q=Kensington+London" }
+    ],
+    food: "🍺 Cena en pub tradicional — The Builder's Arms Chelsea\n🍗 Alternativa: Nando's o Wagamama (los niños los aman)\n🛒 Supermercado Tesco/Sainsbury's para snacks y desayuno del día siguiente",
+    cost: "$150 (Traslado + Cena)",
+    tip: "Compren las Oyster Cards en la estación desde el día 1 — ahorran 40% vs billetes sueltos."
+  },
+  {
+    num: 2, fecha: "Jul 17", label: "17 Jul", theme: "Vistas y Gobierno",
+    badge: "Día 2",
+    activities: [
+      { name: "London Eye 🌟", tag: "paid", note: "Reservar online — £36 adulto, £33 niño. Vistas de 360° sobre la ciudad. 30 minutos de vuelo", metro: "Waterloo / Westminster", map: "https://maps.google.com/?q=London+Eye" },
+      { name: "SEA LIFE London Aquarium 🐠", tag: "paid", note: "Ideal para los niños — £33 adulto, £28 niño. Tiburones, rayas, pingüinos y más", metro: "Westminster / Waterloo", map: "https://maps.google.com/?q=SEA+LIFE+London+Aquarium" },
+      { name: "Big Ben & Casas del Parlamento", tag: "free", note: "Exterior — foto icónica desde Westminster Bridge", metro: "Westminster", map: "https://maps.google.com/?q=Big+Ben+London" },
+      { name: "St James's Park", tag: "free", note: "Paseo de 2.8 km — el parque más antiguo de Londres. Patos y pelícanos en el lago", metro: "St James's Park", map: "https://maps.google.com/?q=St+James%27s+Park+London" },
+      { name: "Buckingham Palace — Cambio de Guardia", tag: "free", note: "Verificar calendario antes. Llegar 45 min antes. Los soldados son impresionantes de cerca", metro: "Green Park / Victoria", map: "https://maps.google.com/?q=Buckingham+Palace+London" },
+      { name: "Downing Street (exterior)", tag: "free", note: "Residencia del Primer Ministro — foto rápida de paso", metro: "Westminster", map: "https://maps.google.com/?q=10+Downing+Street+London" }
+    ],
+    food: "🍕 Locale County Hall — Italiano frente al London Eye, menú bambini pizza+helado\n🌍 Giraffe Southbank — Menú niño £5 (main+2 sides). Kids Eat Free en julio\n🍔 Alternativa rápida: Pret A Manger o Itsu (sano y rico)",
+    cost: "$150 (Entradas London Eye + Aquarium + transporte)",
+    tip: "Pendiente confirmar horario de cambio de guardia en buckinghampalace.royal.uk"
+  },
+  {
+    num: 3, fecha: "Jul 18", label: "18 Jul", theme: "Harry Potter 🧙",
+    badge: "Excursión",
+    activities: [
+      { name: "Warner Bros. Studio Tour — The Making of Harry Potter 🌟🌟", tag: "paid", note: "⚠️ RESERVAR YA — se agota. £56 adulto, £45 niño. Evento especial 'First Year at Hogwarts' (hasta sep 2026 — 25 aniversario). Llegar a las 10am para aprovechar todo el día", metro: "Euston → tren a Watford Junction + bus shuttle", map: "https://maps.google.com/?q=Warner+Bros+Studio+Tour+Leavesden" },
+      { name: "Estadio de Wembley (de camino)", tag: "free", note: "Vista exterior del estadio más famoso de Inglaterra — foto desde afuera", metro: "Wembley Park", map: "https://maps.google.com/?q=Wembley+Stadium+London" }
+    ],
+    food: "☕ Café del Studio Tour — Butterbeer 🍺 (frío o caliente) + fish & chips\n🍽️ Restaurante temático dentro del estudio — comer rodeados de decorados de HP",
+    cost: "£56×2 adultos + £45×1 niño = £157 por familia · Shuttle £40pp aprox",
+    tip: "¡No hay venta en taquilla! Reservar en wbstudiotour.co.uk ahora mismo."
+  },
+  {
+    num: 4, fecha: "Jul 19", label: "19 Jul", theme: "Ciencia y Museos",
+    badge: "Día 4",
+    activities: [
+      { name: "Museo de Historia Natural 🦕", tag: "free", note: "Gratuito — uno de los más impresionantes del mundo. Sala de dinosaurios: el esqueleto de diplodocus en la entrada es ÉPICO para niños", metro: "South Kensington (Piccadilly/Circle)", map: "https://maps.google.com/?q=Natural+History+Museum+London" },
+      { name: "Museo de la Ciencia — Wonderlab 🔬", tag: "free", note: "Gratuito — Sección interactiva para niños: experimentos, tecnología, simuladores", metro: "South Kensington", map: "https://maps.google.com/?q=Science+Museum+London" },
+      { name: "Harrods", tag: "walk", note: "El centro comercial más famoso del mundo — entrar aunque sea a curiosear. La sección de juguetes y dulces es especial para los niños", metro: "Knightsbridge (Piccadilly)", map: "https://maps.google.com/?q=Harrods+London" }
+    ],
+    food: "🍔 Five Guys South Kensington — Burgers + milkshakes, al lado del museo\n☕ Benugo Science Museum — Afternoon tea temático dentro del museo\n🍺 Almuerzo en pub de barrio South Kensington\n⚽ Nota: ¡Final del Mundial a las 8pm hora UK!",
+    cost: "$50 (Almuerzo + Transporte). Los museos son GRATIS",
+    tip: "Los tres museos de South Kensington están uno al lado del otro — perfecto para un día completo sin gastar en entradas."
+  },
+  {
+    num: 5, fecha: "Jul 20", label: "20 Jul", theme: "Realeza y Torre",
+    badge: "Día 5",
+    activities: [
+      { name: "Torre de Londres 🌟", tag: "paid", note: "£37 adulto, £18.50 niño — Reservar online, horario 9:30am. Las Joyas de la Corona tienen 3,000+ diamantes. Los Beefeaters hacen tours gratuitos", metro: "Tower Hill (District/Circle)", map: "https://maps.google.com/?q=Tower+of+London" },
+      { name: "Tower Bridge 🌉", tag: "paid", note: "£16 adulto, £8 niño — Cruzar el puente y subir a la Exhibition. El suelo de cristal tiene vistas al Támesis desde arriba", metro: "Tower Hill / London Bridge", map: "https://maps.google.com/?q=Tower+Bridge+London" },
+      { name: "HMS Belfast ⚓", tag: "paid", note: "Buque de guerra interactivo flotante en el Támesis — los niños pueden explorar todos los compartimentos del barco", metro: "London Bridge (Jubilee/Northern)", map: "https://maps.google.com/?q=HMS+Belfast+London" },
+      { name: "Sky Garden", tag: "free", note: "Reservar GRATIS con 3 semanas de antelación — skygarden.london. Vistas espectaculares desde el piso 35", metro: "Monument / Bank", map: "https://maps.google.com/?q=Sky+Garden+London" },
+      { name: "St Paul's Cathedral", tag: "paid", note: "£20 adulto, £8 niño — La catedral más emblemática de Londres. La Galería de los Susurros tiene acústica mágica", metro: "St Paul's (Central)", map: "https://maps.google.com/?q=St+Paul%27s+Cathedral+London" },
+      { name: "The Shard — vista exterior", tag: "free", note: "Alternativa gratuita al mirador: foto desde fuera o Oblix bar planta 32", metro: "London Bridge", map: "https://maps.google.com/?q=The+Shard+London" }
+    ],
+    food: "🍖 Bread Street Kitchen (Gordon Ramsay) — ¡Niños ≤10 años comen GRATIS!\n🍳 Bill's London Bridge — All-day, menú niños fish fingers + postre\n🛒 Borough Market — boroughmarket.org.uk — el mejor mercado gastronómico\n🚢 Regreso: Uber Boat desde London Bridge (¡mágico al atardecer!)",
+    cost: "$180 (Entradas Torre + cena por familia)",
+    tip: "Tomen el Uber Boat al atardecer — ver la ciudad iluminada desde el Támesis es uno de los mejores momentos del viaje."
+  },
+  {
+    num: 6, fecha: "Jul 21", label: "21 Jul", theme: "Parques y Notting Hill",
+    badge: "Día 6",
+    activities: [
+      { name: "Hyde Park — día completo", tag: "free", note: "El parque más famoso de Londres — 4 km de paseo. Speakers' Corner los domingos", metro: "Lancaster Gate / Marble Arch", map: "https://maps.google.com/?q=Hyde+Park+London" },
+      { name: "Diana Memorial Playground 🏴‍☠️", tag: "free", note: "¡Esencial para Maxi y Elena! Barco pirata de madera enorme, árboles para trepar, zona de agua. El parque de juegos más especial de Londres — GRATIS", metro: "Queensway / Bayswater", map: "https://maps.google.com/?q=Diana+Memorial+Playground+Kensington" },
+      { name: "Alquiler de bote en The Serpentine 🛶", tag: "paid", note: "£20 por bote — los niños pueden remar (con ayuda). Máximo 4 personas por bote. ¡Diversión garantizada!", metro: "Lancaster Gate", map: "https://maps.google.com/?q=Serpentine+Lake+Hyde+Park" },
+      { name: "Notting Hill 🌈", tag: "free", note: "El barrio más fotogénico de Londres — casitas de colores pastel. Foto perfecta en Portobello Road", metro: "Notting Hill Gate", map: "https://maps.google.com/?q=Notting+Hill+London" },
+      { name: "Portobello Road Market", tag: "free", note: "Mercado de antigüedades y street food — Sábados es el mejor día. Los niños adoran explorar los puestos", metro: "Ladbroke Grove / Notting Hill Gate", map: "https://maps.google.com/?q=Portobello+Road+Market+London" }
+    ],
+    food: "☕ The Orangery Kensington — Afternoon tea en Kensington Gardens\n🍔 Electric Diner — Brunch americano en Portobello Road\n🍽️ Serpentine Bar & Kitchen — ~£20 por adulto, con vistas al lago",
+    cost: "£20 bote + almuerzo ~£50 por familia",
+    tip: "Diana Memorial Playground es completamente gratis y Maxi y Elena van a querer quedarse 2 horas mínimo — planeen tiempo extra."
+  },
+  {
+    num: 7, fecha: "Jul 22", label: "22 Jul", theme: "Excursión: Oxford",
+    badge: "Excursión",
+    activities: [
+      { name: "Platform 9¾ — King's Cross Station 🧙", tag: "free", note: "Foto icónica con el carrito atravesando la pared + tienda oficial Harry Potter. Gratis la foto (hay cola, ir temprano). Los niños van a alucinar", metro: "King's Cross St Pancras", map: "https://maps.google.com/?q=Platform+9+3+4+King%27s+Cross+London" },
+      { name: "Tren a Oxford 🚂", tag: "paid", note: "Desde Paddington ~1h. Reservar advance tickets: £10-15 vs £30 sin reserva — gwr.com", metro: "Paddington → Oxford", map: "https://maps.google.com/?q=Oxford+University+Oxford" },
+      { name: "Christ Church College — Oxford", tag: "paid", note: "El Gran Comedor que inspiró el de Hogwarts. Los niños reconocerán cada rincón. Verificar horarios de apertura", metro: "Oxford city center", map: "https://maps.google.com/?q=Christ+Church+Oxford" },
+      { name: "Bodleian Library — Oxford", tag: "paid", note: "Una de las bibliotecas más antiguas del mundo — apareció en HP como la enfermería y la sala de restricto", metro: "Oxford city center", map: "https://maps.google.com/?q=Bodleian+Library+Oxford" },
+      { name: "Ruta Alice en el País de las Maravillas 🐇", tag: "free", note: "Tour por las calles que inspiraron a Lewis Carroll — perfecto para los niños", metro: "Oxford city center", map: "https://maps.google.com/?q=Oxford+City+Centre" },
+      { name: "Regreso a Londres", tag: "walk", note: "Tren de regreso a Paddington. Cena en Londres", metro: "Oxford → Paddington", map: "https://maps.google.com/?q=Paddington+Station+London" }
+    ],
+    food: "🍬 The Covered Market Oxford — Comida casual + Ben's Cookies (famosísimas — los niños van a repetir)\n🥐 Cafeterías del centro histórico de Oxford — ambiente universitario único",
+    cost: "~£30 tren ida/vuelta pp + entradas colleges ~£20-30",
+    tip: "Confirmar tour en Oxford. Los niños que han leído/visto Harry Potter van a reconocer el Gran Comedor de Hogwarts en Christ Church — momento épico garantizado."
+  },
+  {
+    num: 8, fecha: "Jul 23", label: "23 Jul", theme: "Cultura y Compras",
+    badge: "Día 8",
+    activities: [
+      { name: "British Museum 🏛️", tag: "free", note: "Gratuito — Piedra de Roseta, momias egipcias, esculturas del Partenón. ¡Imperdible! Los niños flipan con las momias", metro: "Russell Square / Holborn", map: "https://maps.google.com/?q=British+Museum+London" },
+      { name: "Oxford Street — Compras", tag: "free", note: "La calle de compras más famosa de Europa — 2.5 km de tiendas. Nike, Zara, Primark, todo", metro: "Oxford Circus / Bond Street", map: "https://maps.google.com/?q=Oxford+Street+London" },
+      { name: "Hamleys — La juguetería más antigua del mundo 🧸", tag: "free", note: "7 plantas de juguetes en Regent Street desde 1760 — Maxi y Elena van a alucinar. Poner presupuesto límite antes de entrar 😄", metro: "Oxford Circus / Piccadilly Circus", map: "https://maps.google.com/?q=Hamleys+Regent+Street+London" },
+      { name: "Bond Street — vidrieras de lujo", tag: "free", note: "Pasar por las tiendas más exclusivas del mundo aunque sea a mirar los escaparates", metro: "Bond Street", map: "https://maps.google.com/?q=Bond+Street+London" }
+    ],
+    food: "🇮🇳 Dishoom King's Cross — Indio bombay-style. Reservar con 1-2 semanas. Naan + curry increíble\n🍔 Almuerzo en zona Carnaby Street / Soho — múltiples opciones para todos los gustos",
+    cost: "$70 (Almuerzo + Transporte). Presupuesto souvenir aparte",
+    tip: "El British Museum es gratis — reservar timed slot para evitar colas en la entrada principal."
+  },
+  {
+    num: 9, fecha: "Jul 24", label: "24 Jul", theme: "Arte y West End",
+    badge: "Día 9",
+    activities: [
+      { name: "National Gallery 🖼️", tag: "free", note: "Gratuita — Van Gogh, Rembrandt, Monet. Colección impresionante", metro: "Charing Cross (Bakerloo/Northern)", map: "https://maps.google.com/?q=National+Gallery+London" },
+      { name: "Trafalgar Square", tag: "free", note: "Plaza icónica — foto clásica subidos en los leones de Nelson's Column", metro: "Charing Cross", map: "https://maps.google.com/?q=Trafalgar+Square+London" },
+      { name: "Piccadilly Circus 🌟", tag: "free", note: "Las pantallas LED más famosas de Europa — el Times Square londinense", metro: "Piccadilly Circus (Bakerloo/Piccadilly)", map: "https://maps.google.com/?q=Piccadilly+Circus+London" },
+      { name: "London Transport Museum 🚌", tag: "paid", note: "Interactivo para niños — historia del metro y buses de Londres. Pueden conducir simuladores de metro", metro: "Covent Garden (Piccadilly)", map: "https://maps.google.com/?q=London+Transport+Museum" },
+      { name: "Covent Garden — espectáculos callejeros 🎪", tag: "free", note: "Artistas callejeros de nivel profesional — siempre hay algo sorprendente. Los niños pueden interactuar con los magos", metro: "Covent Garden", map: "https://maps.google.com/?q=Covent+Garden+London" },
+      { name: "LEGO Store & M&M's World — Leicester Square 🧱", tag: "free", note: "Tiendas icónicas — los niños (y los papás) van a enloquecerse. La estatua de LEGO gigante es para foto obligatoria", metro: "Leicester Square", map: "https://maps.google.com/?q=LEGO+Store+Leicester+Square+London" },
+      { name: "Chinatown London 🥢", tag: "free", note: "Zona de China Town con restaurantes y ambiente único — dragones decorativos que encantan a los niños", metro: "Leicester Square / Piccadilly Circus", map: "https://maps.google.com/?q=Chinatown+London" }
+    ],
+    food: "🇲🇽 Wahaca Covent Garden — Mexicano, tacos + churros. ¡Van a sentirse en casa!\n🇨🇳 Chinatown — Dim sum, pato cantonés desde £8/plato",
+    cost: "Entrada Transport Museum ~£20 adulto. Revisar cartelera West End para la noche",
+    tip: "Revisar cartelera de teatros — una noche de musical en el West End (El Rey León, Mamma Mia) es unforgettable para los niños."
+  },
+  {
+    num: 10, fecha: "Jul 25", label: "25 Jul", theme: "Greenwich",
+    badge: "Día 10",
+    activities: [
+      { name: "Thames Clipper desde Embankment 🚢", tag: "paid", note: "£10 por persona — el paseo en barco por el Támesis hasta Greenwich. Los niños pueden ir en cubierta y ver el skyline de Londres desde el agua", metro: "Embankment (Circle/District)", map: "https://maps.google.com/?q=Embankment+Pier+London" },
+      { name: "Cutty Sark 🌟", tag: "paid", note: "£15 adulto, £8 niño — El único clipper del té victoriano conservado. Los niños pueden explorar todo el barco y ver cómo vivía la tripulación", metro: "Cutty Sark (DLR)", map: "https://maps.google.com/?q=Cutty+Sark+Greenwich" },
+      { name: "Royal Observatory Greenwich 🌍", tag: "paid", note: "£18 adulto, £10 niño — Pararse en el Meridiano 0° con un pie en el Este y otro en el Oeste. Momento épico para los niños. Telescopios y Harrison clocks", metro: "Greenwich (tren desde London Bridge)", map: "https://maps.google.com/?q=Royal+Observatory+Greenwich" },
+      { name: "National Maritime Museum", tag: "free", note: "Gratuito — Historia naval fascinante. Incluido en el combo Greenwich Day Pass", metro: "Cutty Sark DLR", map: "https://maps.google.com/?q=National+Maritime+Museum+Greenwich" },
+      { name: "Southbank — paseo ribera", tag: "free", note: "Regresar en barco y pasear por la orilla sur del Támesis", metro: "Southwark / Waterloo", map: "https://maps.google.com/?q=Southbank+London" },
+      { name: "Shakespeare's Globe Theatre", tag: "free", note: "Vista exterior del teatro isabelino — se puede hacer tour por dentro", metro: "Southwark / Blackfriars", map: "https://maps.google.com/?q=Shakespeare%27s+Globe+London" }
+    ],
+    food: "🛒 Borough Market — El mejor mercado gastronómico de Londres\n🥩 Flat Iron Southbank — Steak £14 + helado GRATIS, menú kids\n🍻 BrewDog Waterloo — ¡Tiene tobogán + bolos! Niños bienvenidos hasta las 9pm",
+    cost: "Thames Clipper £10pp + Greenwich Day Pass £32 adulto + £16 niño",
+    tip: "De regreso tomen el DLR (tren sin conductor) sentándose en la PRIMERA FILA — para los niños es como manejar el tren. Experiencia favorita garantizada."
+  },
+  {
+    num: 11, fecha: "Jul 26", label: "26 Jul", theme: "Stonehenge & Bath",
+    badge: "Excursión",
+    activities: [
+      { name: "Tour Stonehenge + Bath — día completo 🌟🌟", tag: "paid", note: "£129 adulto, £99 niño — Evan Evans Tours desde Victoria Coach Station. CON Roman Baths. ~10 horas. Reservar con 2-3 semanas de antelación en evanevanstours.com", metro: "Victoria Coach Station (salida del tour)", map: "https://maps.google.com/?q=Stonehenge+Wiltshire+UK" },
+      { name: "Roman Baths — Bath 🏛️", tag: "paid", note: "Incluido en el tour — Termas romanas del siglo I d.C. increíblemente conservadas. Los niños pueden ver cómo los romanos se bañaban hace 2,000 años", metro: "Bath city center", map: "https://maps.google.com/?q=Roman+Baths+Bath+UK" },
+      { name: "Bath Abbey & Pulteney Bridge", tag: "free", note: "La ciudad más bonita de Inglaterra — pasear por sus calles de piedra dorada es un sueño", metro: "Bath city center", map: "https://maps.google.com/?q=Bath+Abbey+Bath+UK" }
+    ],
+    food: "🥟 Cornish Pasty en Bath — Económico, delicioso y muy típico\n🥖 Sally Lunn's Bath — Los famosos Bath Buns desde 1680 — los más antiguos del mundo\n🍽️ Almuerzo incluido en paradas del tour",
+    cost: "2 × £129 + 1 × £99 = £357 por familia. Reservar en evanevanstours.com",
+    tip: "Confirmar y reservar excursión YA. Elegir opción CON Roman Baths incluido (£129). Sale de Victoria Coach Station a las 8am."
+  },
+  {
+    num: 12, fecha: "Jul 27", label: "27 Jul", theme: "Último día",
+    badge: "Salida",
+    activities: [
+      { name: "Estatua de Paddington Bear 🐻 — Paddington Station", tag: "free", note: "Foto imperdible con el oso más famoso de Inglaterra — los niños lo adoran. Buscar bien porque está en un rincón especial de la estación", metro: "Paddington (Bakerloo/Circle/H&C)", map: "https://maps.google.com/?q=Paddington+Station+London" },
+      { name: "Little Venice — Paseo en canal boat 🛶", tag: "paid", note: "A 10 min caminando del hotel hacia el norte. Bote por el canal hasta el Zoo o Camden — los niños lo adoran. Ambiente tranquilo y muy bonito", metro: "Warwick Avenue (Bakerloo)", map: "https://maps.google.com/?q=Little+Venice+London" },
+      { name: "Madame Tussauds 🎭", tag: "paid", note: "£37 adulto, £33 niño — Museo de cera. Fotos con futbolistas, actores y superhéroes. Los niños flipan con las figuras interactivas", metro: "Baker Street (múltiples)", map: "https://maps.google.com/?q=Madame+Tussauds+London" },
+      { name: "Camden Town & Camden Market 🎸", tag: "free", note: "El barrio más alternativo y colorido de Londres — rock, arte, street food internacional", metro: "Camden Town (Northern)", map: "https://maps.google.com/?q=Camden+Market+London" },
+      { name: "Regent's Park 🌹", tag: "free", note: "Último paseo — jardines impecables. Las rosas en julio son preciosas. Vistas al ZSL London Zoo", metro: "Regent's Park / Camden Town", map: "https://maps.google.com/?q=Regent%27s+Park+London" },
+      { name: "Check-out y traslado al aeropuerto ✈️", tag: "walk", note: "Heathrow Express desde Paddington: 15 min, £22-25 (¡cómodo con maletas!). O Piccadilly Line: 45-50 min, £6 con Oyster. Decidir según tiempo disponible", metro: "Piccadilly Line directo a Heathrow / Heathrow Express", map: "https://maps.google.com/?q=Heathrow+Airport+London" }
+    ],
+    food: "🌮 Camden Market — Street food mundial: arepas colombianas, pad thai, churros. Desde £5\n🍔 Honest Burgers Camden — British burgers, rosemary fries — el mejor burger del viaje",
+    cost: "$50 (Transporte de salida). ¡Presupuesto souvenir de último día!",
+    tip: "Heathrow Express sale de Paddington Station cada 15 min — con maletas es mucho más cómodo. Llegar al aeropuerto con 3 horas de antelación en temporada alta."
+  }
+];
+
+const RESERVES = [
+  { name: "Warner Bros. Harry Potter Studio Tour", when: "AHORA — abril 2026", urgency: "critical", url: "https://www.wbstudiotour.co.uk/tickets/" },
+  { name: "Sky Garden (gratuito pero cupos limitados)", when: "3 semanas antes del día 5", urgency: "critical", url: "https://skygarden.london" },
+  { name: "Torre de Londres", when: "Mayo 2026", urgency: "high", url: "https://www.hrp.org.uk/tower-of-london/visit/tickets-and-prices/" },
+  { name: "London Eye", when: "Mayo 2026", urgency: "high", url: "https://www.londoneye.com/tickets-and-prices/" },
+  { name: "Stonehenge + Bath Tour (Evan Evans)", when: "Mayo 2026", urgency: "high", url: "https://evanevanstours.com/tours/day-tours-from-london/stonehenge-and-bath/" },
+  { name: "Dishoom (cena — muy demandado)", when: "1-2 semanas antes", urgency: "high", url: "https://www.dishoom.com" },
+  { name: "Excursión a Oxford (tren advance)", when: "2-4 semanas antes", urgency: "med", url: "https://www.gwr.com" },
+  { name: "Greenwich Day Pass (Cutty Sark + Observatory)", when: "1 semana antes", urgency: "med", url: "https://www.rmg.co.uk/plan-your-visit/tickets-prices" },
+  { name: "Madame Tussauds", when: "1 semana antes", urgency: "med", url: "https://www.madametussauds.com/london/tickets/" },
+];
+
+// ===== STATE =====
+let currentDay = 0;
+let currentPerson = 'todos';
+let isKidMode = false;
+let checked = {};
+try { checked = JSON.parse(localStorage.getItem('londonChecked_v2') || '{}'); } catch(e) {}
+
+function saveChecked() {
+  try { localStorage.setItem('londonChecked_v2', JSON.stringify(checked)); } catch(e) {}
+}
+function getCheckKey(dayIdx, actIdx) { return `d${dayIdx}_a${actIdx}_${currentPerson}`; }
+
+// ===== KID MODE =====
+const KID_PEOPLE = ['Maxi', 'Elena'];
+
+function toggleKidMode(on, person) {
+  isKidMode = on;
+  document.body.classList.remove('kid-mode', 'elena-mode');
+  if (on) {
+    document.body.classList.add(person === 'Elena' ? 'elena-mode' : 'kid-mode');
+  }
+  const banner = document.getElementById('kidBanner');
+  if (banner) {
+    banner.textContent = person === 'Elena'
+      ? '🌸 MODO ELENA ACTIVADO — Actividades mágicas resaltadas ✨👑'
+      : '🧒 MODO MAXI ACTIVADO — Actividades TOP para el aventurero resaltadas ⭐';
+  }
+  buildKidFloats(person);
+}
+
+function buildKidFloats(person) {
+  const container = document.getElementById('kidFloats');
+  if (!container) return;
+  container.innerHTML = '';
+  if (!isKidMode) return;
+  const floats = person === 'Elena'
+    ? ['🌸','👑','🦄','✨','🌺','💜','🌙','⭐','🎀','🌷','🦋','💫']
+    : ['🧙','⚡','🏰','🧸','🎡','🚢','🦕','🌈','🎪','🍬','🐻','⭐'];
+  floats.forEach((f, i) => {
+    const el = document.createElement('div');
+    el.className = 'kid-float';
+    el.textContent = f;
+    el.style.left = (5 + Math.random() * 90) + '%';
+    el.style.top = (5 + Math.random() * 90) + '%';
+    el.style.setProperty('--dur', (6 + Math.random() * 6) + 's');
+    el.style.setProperty('--delay', (Math.random() * 5) + 's');
+    container.appendChild(el);
+  });
+}
+
+// ===== PERSON SELECT =====
+function selectPerson(name, btn) {
+  currentPerson = name;
+  document.querySelectorAll('.person-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const isKid = KID_PEOPLE.includes(name);
+  toggleKidMode(isKid, name);
+
+  const greetingName = document.getElementById('greetingName');
+  const greetingSub = document.getElementById('greetingSubtitle');
+
+  const msgs = {
+    todos: ['¡Bienvenidos, Familias Parra & Valencia! 🎉', 'Londres en 12 días — julio 2026'],
+    Camilo: ['¡Hola Camilo! 🎩', 'Tu guía personal para Londres · Familia Parra'],
+    Catalina: ['¡Hola Catalina! ✨', 'Tu guía personal para Londres · Familia Parra'],
+    Maxi: ['¡Hola Maxi! 🧙⚡', '¡Harry Potter, dinosaurios y aventuras te esperan!'],
+    Santiago: ['¡Hola Santiago! 🇬🇧', 'Tu guía personal para Londres · Familia Valencia'],
+    Camila: ['¡Hola Camila! 🌟', 'Tu guía personal para Londres · Familia Valencia'],
+    Elena: ['¡Hola Elena! 🌸✨', '¡Princesas, magia y las mejores aventuras te esperan!']
+  };
+
+  greetingName.textContent = msgs[name][0];
+  greetingSub.textContent = msgs[name][1];
+
+  renderDayContent();
+  updateGlobalProgress();
+  // Re-render travel tab if it's currently visible
+  if (document.getElementById('tab-travel').classList.contains('active')) renderTravelTab();
+}
+
+// ===== DAY NAV =====
+function buildDayNav() {
+  const nav = document.getElementById('dayNav');
+  nav.innerHTML = DAYS.map((d, i) => `
+    <button class="day-btn ${i === currentDay ? 'active' : ''}" onclick="selectDay(${i})">
+      <span class="day-num">${d.num}</span>
+      <span class="day-date">${d.label}</span>
+    </button>
+  `).join('');
+}
+
+function selectDay(idx) {
+  currentDay = idx;
+  document.querySelectorAll('.day-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+  renderDayContent();
+}
+
+function toggleActivity(dayIdx, actIdx) {
+  const key = getCheckKey(dayIdx, actIdx);
+  checked[key] = !checked[key];
+  saveChecked();
+  renderDayContent();
+  updateGlobalProgress();
+}
+
+function toggleDetail(id) {
+  const el = document.getElementById(id);
+  const btn = document.getElementById('btn_' + id);
+  if (el) { el.classList.toggle('open'); if (btn) btn.classList.toggle('open'); }
+}
+
+function getDayProgress(dayIdx) {
+  const d = DAYS[dayIdx];
+  let done = 0;
+  for (let i = 0; i < d.activities.length; i++) {
+    if (checked[getCheckKey(dayIdx, i)]) done++;
+  }
+  return { done, total: d.activities.length, pct: d.activities.length > 0 ? Math.round(done/d.activities.length*100) : 0 };
+}
+
+// ===== RENDER DAY =====
+function renderDayContent() {
+  const d = DAYS[currentDay];
+  const prog = getDayProgress(currentDay);
+  const kidActsForDay = KID_ACTIVITIES[currentDay] || [];
+
+  const foodLines = d.food.split('\n').map(line => {
+    const emoji = line.match(/^[\u{1F300}-\u{1F9FF}🇮🇳🇲🇽🇨🇳]/u)?.[0] || '🍽️';
+    const clean = line.replace(/^[\u{1F300}-\u{1F9FF}🇮🇳🇲🇽🇨🇳]\s*/u, '');
+    return `<div class="food-item"><span class="food-emoji">${emoji}</span><span>${clean}</span></div>`;
+  }).join('');
+
+  const tags = { paid: 'tag-paid', free: 'tag-free', food: 'tag-food', walk: 'tag-walk', excur: 'tag-excur' };
+  const tagLabels = { paid: 'De pago', free: 'Gratis', food: 'Gastronomía', walk: 'Paseo', excur: 'Excursión' };
+
+  const activitiesHtml = d.activities.map((act, i) => {
+    const key = getCheckKey(currentDay, i);
+    const isDone = !!checked[key];
+    const detailId = `detail_${currentDay}_${i}`;
+    const isKidAct = kidActsForDay.includes(i);
+
+    return `
+      <div class="activity-card ${isDone ? 'done' : ''} ${isKidAct ? 'kid-highlight' : ''}" id="card_${detailId}">
+        <div class="activity-main" onclick="toggleActivity(${currentDay},${i})">
+          <button class="check-btn" onclick="event.stopPropagation(); toggleActivity(${currentDay},${i})">
+            <span class="check-icon">✓</span>
+            <span class="check-empty"></span>
+          </button>
+          <div class="activity-content">
+            <div class="activity-name">${act.name}</div>
+            <div class="activity-meta">
+              <span class="act-tag ${tags[act.tag] || 'tag-walk'}">${tagLabels[act.tag] || act.tag}</span>
+              ${act.metro ? `<span class="act-tag tag-walk">🚇 ${act.metro.split('(')[0].trim()}</span>` : ''}
+              <span class="kid-star">⭐ TOP para niños</span>
+            </div>
+          </div>
+          <button class="act-expand-btn" id="btn_${detailId}" onclick="event.stopPropagation(); toggleDetail('${detailId}')">▾</button>
+        </div>
+        <div class="activity-detail" id="${detailId}">
+          ${act.note ? `<div class="detail-row"><span class="detail-icon">📝</span><span class="detail-text">${act.note}</span></div>` : ''}
+          ${act.metro ? `<div class="detail-row"><span class="detail-icon">🚇</span><span class="detail-text">${act.metro}</span></div>` : ''}
+          <a class="map-btn" href="${act.map}" target="_blank" onclick="event.stopPropagation()">📍 Abrir en Google Maps</a>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Kid tip for this day
+  const kidTipHtml = KID_TIPS[currentDay] ? `
+    <div class="kid-tip-card">
+      <div class="kid-tip-title">🧒 Tip para Maxi y Elena</div>
+      <div class="kid-tip-text">${KID_TIPS[currentDay]}</div>
+    </div>
+  ` : '';
+
+  document.getElementById('dayContent').innerHTML = `
+    <div class="day-header">
+      <div class="day-header-inner">
+        <div class="day-header-top">
+          <div class="day-theme">${d.theme}</div>
+          <div class="day-badge">${d.fecha}</div>
+        </div>
+        <div class="day-meta">
+          <span class="day-meta-item">📅 Día ${d.num}</span>
+          <span class="day-meta-item">✅ ${prog.done}/${prog.total} actividades</span>
+          ${isKidMode ? `<span class="day-meta-item">⭐ ${kidActsForDay.length} actividades TOP para niños</span>` : ''}
+          ${d.cost ? `<span class="day-meta-item">💰 ${d.cost}</span>` : ''}
+        </div>
+        <div class="day-progress-bar">
+          <div class="day-progress-fill" style="width:${prog.pct}%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Actividades del día</div>
+    ${activitiesHtml}
+
+    ${kidTipHtml}
+
+    <div class="section-label">Gastronomía recomendada</div>
+    <div class="food-card">
+      <div class="food-title">🍽️ Dónde comer</div>
+      ${foodLines}
+    </div>
+
+    ${d.tip ? `<div class="tips-card"><div class="tips-title">💡 Tip del día</div><div class="tip-text">${d.tip}</div></div>` : ''}
+  `;
+}
+
+function updateGlobalProgress() {
+  let total = 0, done = 0;
+  DAYS.forEach((d, di) => {
+    d.activities.forEach((_, ai) => {
+      total++;
+      if (checked[getCheckKey(di, ai)]) done++;
+    });
+  });
+  const pct = total > 0 ? Math.round(done/total*100) : 0;
+  document.getElementById('globalPct').textContent = pct + '%';
+  document.getElementById('ov-acts').textContent = total;
+  document.getElementById('ov-done').textContent = done;
+  document.getElementById('ov-pct').textContent = pct + '%';
+}
+
+function buildReserves() {
+  const urgClass = { critical: 'urg-critical', high: 'urg-high', med: 'urg-med' };
+  document.getElementById('reserveList').innerHTML = RESERVES.map(r => `
+    <div class="reserve-item">
+      <div class="urgency-dot ${urgClass[r.urgency]}"></div>
+      <div>
+        <div class="reserve-name">${r.name}</div>
+        <div class="reserve-when">⏰ ${r.when}</div>
+      </div>
+      <a class="reserve-link" href="${r.url}" target="_blank">Reservar →</a>
+    </div>
+  `).join('');
+}
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  btn.classList.add('active');
+  if (tab === 'travel') renderTravelTab();
+}
+
+// ===== TRAVEL DATA =====
+const HOTEL = {
+  name: 'Mornington London Kensington',
+  collection: 'BW Premier Collection',
+  checkin: '16 Jul · 14:00', checkout: '27 Jul · 11:00',
+  nights: 11, rooms: 2,
+  address: '19-21 Penywern Rd, Earl\'s Court, Londres',
+  room: 'Superior Room, 1 Queen Bed + Single Sofabed · 2 adultos + 1 menor (9 años) por habitación',
+  breakfast: 'Desayuno incluido · Fee desayuno completo: ~£15/persona',
+  locator: 'Valencia: 24794515 · Viva Orlando LLC',
+  policy: '100% penalidad desde el 1 Feb 2026 — NO reembolsable',
+  phone: '+1 407 473 7873',
+  map: 'https://maps.google.com/?q=19-21+Penywern+Rd+Earls+Court+London'
+};
+
+// Flights indexed by person
+const FLIGHTS = {
+  Santiago: {
+    label: 'Santiago Valencia', initials: 'SV', type: 'Adulto · Lifemiles Diamond',
+    confirmed: true,
+    tags: ['🌟 103,870 millas redimidas', 'Ref: BEJV34', '1 PC equipaje'],
+    tagTypes: ['ft-miles', 'ft-fare', 'ft-bag'],
+    segments: [
+      { num: 'Tramo 1 · Ida', code: 'AV8405', codeClass: 'miles-flight', from: 'MDE', fromCity: 'Medellín', to: 'BOG', toCity: 'Bogotá', dep: '20:50', depDate: '15 Jul 2026', arr: '21:50', arrDate: '15 Jul 2026', dur: '1h 00m', tags: ['Classic · Elite 5% OFF', 'Millas'], tagTypes: ['ft-fare', 'ft-miles'] },
+      { num: 'Tramo 2 · Ida', code: 'AV120', codeClass: 'miles-flight', from: 'BOG', fromCity: 'Bogotá T1', to: 'LHR', toCity: 'Heathrow T2', dep: '23:25', depDate: '15 Jul 2026', arr: '15:35', arrDate: '16 Jul 2026', dur: '10h 10m', tags: ['Classic · Elite 5% OFF', 'Millas'], tagTypes: ['ft-fare', 'ft-miles'] },
+      { num: 'Tramo 3 · Regreso', code: 'AV121', codeClass: 'miles-flight', from: 'LHR', fromCity: 'Heathrow T2', to: 'BOG', toCity: 'Bogotá T1', dep: '22:05', depDate: '27 Jul 2026', arr: '03:10', arrDate: '28 Jul 2026', dur: '11h 05m', tags: ['Classic · Elite 5% OFF', 'Millas'], tagTypes: ['ft-fare', 'ft-miles'] },
+      { num: 'Tramo 4 · Regreso', code: 'AV9252', codeClass: 'miles-flight', from: 'BOG', fromCity: 'Bogotá T1', to: 'MDE', toCity: 'Medellín', dep: '05:20', depDate: '28 Jul 2026', arr: '06:20', arrDate: '28 Jul 2026', dur: '1h 00m', tags: ['Classic · Elite 5% OFF', 'Millas'], tagTypes: ['ft-fare', 'ft-miles'] },
+    ]
+  },
+  Camila: {
+    label: 'Camila Montoya', initials: 'CM', type: 'Adulto',
+    confirmed: true,
+    tags: ['Ref: BEVCT7', '1 PC equipaje', 'Avianca Classic'],
+    tagTypes: ['ft-fare', 'ft-bag', 'ft-fare'],
+    segments: [
+      { num: 'Tramo 1 · Ida', code: 'AV9337', codeClass: '', from: 'MDE', fromCity: 'Medellín', to: 'BOG', toCity: 'Bogotá T1', dep: '19:40', depDate: '15 Jul 2026', arr: '20:40', arrDate: '15 Jul 2026', dur: '1h 00m', tags: ['Asiento: 11C', '1 PC'], tagTypes: ['ft-seat', 'ft-bag'] },
+      { num: 'Tramo 2 · Ida', code: 'AV120', codeClass: '', from: 'BOG', fromCity: 'Bogotá T1', to: 'LHR', toCity: 'Heathrow T2', dep: '23:25', depDate: '15 Jul 2026', arr: '15:35', arrDate: '16 Jul 2026', dur: '10h 10m', tags: ['Asiento: 08G', '1 PC'], tagTypes: ['ft-seat', 'ft-bag'] },
+      { num: 'Tramo 3 · Regreso', code: 'AV121', codeClass: '', from: 'LHR', fromCity: 'Heathrow T2', to: 'BOG', toCity: 'Bogotá T1', dep: '22:05', depDate: '27 Jul 2026', arr: '03:10', arrDate: '28 Jul 2026', dur: '11h 05m', tags: ['Asiento: 09G', '1 PC'], tagTypes: ['ft-seat', 'ft-bag'] },
+      { num: 'Tramo 4 · Regreso', code: 'AV9252', codeClass: '', from: 'BOG', fromCity: 'Bogotá T1', to: 'MDE', toCity: 'Medellín', dep: '05:20', depDate: '28 Jul 2026', arr: '06:20', arrDate: '28 Jul 2026', dur: '1h 00m', tags: ['Asiento: 04D'], tagTypes: ['ft-seat'] },
+    ]
+  },
+  Elena: {
+    label: 'Elena Valencia', initials: 'EV', type: 'Menor (9 años)',
+    confirmed: true, isKid: true,
+    tags: ['Ref: BEVCT7', '1 PC equipaje', 'Avianca Classic'],
+    tagTypes: ['ft-fare', 'ft-bag', 'ft-fare'],
+    segments: [
+      { num: 'Tramo 1 · Ida', code: 'AV9337', codeClass: '', from: 'MDE', fromCity: 'Medellín', to: 'BOG', toCity: 'Bogotá T1', dep: '19:40', depDate: '15 Jul 2026', arr: '20:40', arrDate: '15 Jul 2026', dur: '1h 00m', tags: ['Asiento: 11B', '1 PC'], tagTypes: ['ft-seat', 'ft-bag'] },
+      { num: 'Tramo 2 · Ida', code: 'AV120', codeClass: '', from: 'BOG', fromCity: 'Bogotá T1', to: 'LHR', toCity: 'Heathrow T2', dep: '23:25', depDate: '15 Jul 2026', arr: '15:35', arrDate: '16 Jul 2026', dur: '10h 10m', tags: ['Asiento: 08J', '1 PC'], tagTypes: ['ft-seat', 'ft-bag'] },
+      { num: 'Tramo 3 · Regreso', code: 'AV121', codeClass: '', from: 'LHR', fromCity: 'Heathrow T2', to: 'BOG', toCity: 'Bogotá T1', dep: '22:05', depDate: '27 Jul 2026', arr: '03:10', arrDate: '28 Jul 2026', dur: '11h 05m', tags: ['Asiento: 09J', '1 PC'], tagTypes: ['ft-seat', 'ft-bag'] },
+      { num: 'Tramo 4 · Regreso', code: 'AV9252', codeClass: '', from: 'BOG', fromCity: 'Bogotá T1', to: 'MDE', toCity: 'Medellín', dep: '05:20', depDate: '28 Jul 2026', arr: '06:20', arrDate: '28 Jul 2026', dur: '1h 00m', tags: ['Asiento: 04E'], tagTypes: ['ft-seat'] },
+    ]
+  },
+  Camilo: {
+    label: 'Juan Camilo Parra Osorio', initials: 'CP', type: 'Adulto',
+    confirmed: true,
+    tags: ['Ref: BERSFJ', 'Tiquete: 1342152989225', '1 PC · 1 carry-on'],
+    tagTypes: ['ft-fare', 'ft-fare', 'ft-bag'],
+    segments: [
+      { num: 'Tramo 1 · Ida', code: 'AV9325', codeClass: '', from: 'MDE', fromCity: 'Medellín', to: 'BOG', toCity: 'Bogotá T1', dep: '18:55', depDate: '15 Jul 2026', arr: '19:55', arrDate: '15 Jul 2026', dur: '1h 00m', tags: ['Asiento: 15A', 'Classic'], tagTypes: ['ft-seat','ft-fare'] },
+      { num: 'Tramo 2 · Ida', code: 'AV120', codeClass: '', from: 'BOG', fromCity: 'Bogotá T1', to: 'LHR', toCity: 'Heathrow T2', dep: '23:25', depDate: '15 Jul 2026', arr: '15:35', arrDate: '16 Jul 2026', dur: '10h 10m', tags: ['Asiento: 9A', 'Classic · No reembolsable'], tagTypes: ['ft-seat','ft-fare'] },
+      { num: 'Tramo 3 · Regreso', code: 'AV121', codeClass: '', from: 'LHR', fromCity: 'Heathrow T2', to: 'BOG', toCity: 'Bogotá T1', dep: '22:05', depDate: '27 Jul 2026', arr: '03:10', arrDate: '28 Jul 2026', dur: '11h 05m', tags: ['Asiento: 10A', 'Flex · Reembolsable'], tagTypes: ['ft-seat','ft-miles'] },
+      { num: 'Tramo 4 · Regreso', code: 'AV9252', codeClass: '', from: 'BOG', fromCity: 'Bogotá T1', to: 'MDE', toCity: 'Medellín', dep: '05:20', depDate: '28 Jul 2026', arr: '06:20', arrDate: '28 Jul 2026', dur: '1h 00m', tags: ['Asiento: 5A', 'Flex'], tagTypes: ['ft-seat','ft-miles'] },
+    ]
+  },
+  Catalina: {
+    label: 'Catalina Maria Velez Gomez', initials: 'CT', type: 'Adulto',
+    confirmed: true,
+    tags: ['Ref: BERSFJ', 'Tiquete: 1342152989226', '1 PC · 1 carry-on'],
+    tagTypes: ['ft-fare', 'ft-fare', 'ft-bag'],
+    segments: [
+      { num: 'Tramo 1 · Ida', code: 'AV9325', codeClass: '', from: 'MDE', fromCity: 'Medellín', to: 'BOG', toCity: 'Bogotá T1', dep: '18:55', depDate: '15 Jul 2026', arr: '19:55', arrDate: '15 Jul 2026', dur: '1h 00m', tags: ['Asiento: 15B', 'Classic'], tagTypes: ['ft-seat','ft-fare'] },
+      { num: 'Tramo 2 · Ida', code: 'AV120', codeClass: '', from: 'BOG', fromCity: 'Bogotá T1', to: 'LHR', toCity: 'Heathrow T2', dep: '23:25', depDate: '15 Jul 2026', arr: '15:35', arrDate: '16 Jul 2026', dur: '10h 10m', tags: ['Asiento: 9B', 'Classic · No reembolsable'], tagTypes: ['ft-seat','ft-fare'] },
+      { num: 'Tramo 3 · Regreso', code: 'AV121', codeClass: '', from: 'LHR', fromCity: 'Heathrow T2', to: 'BOG', toCity: 'Bogotá T1', dep: '22:05', depDate: '27 Jul 2026', arr: '03:10', arrDate: '28 Jul 2026', dur: '11h 05m', tags: ['Asiento: 10B', 'Flex · Reembolsable'], tagTypes: ['ft-seat','ft-miles'] },
+      { num: 'Tramo 4 · Regreso', code: 'AV9252', codeClass: '', from: 'BOG', fromCity: 'Bogotá T1', to: 'MDE', toCity: 'Medellín', dep: '05:20', depDate: '28 Jul 2026', arr: '06:20', arrDate: '28 Jul 2026', dur: '1h 00m', tags: ['Asiento: 5B', 'Flex'], tagTypes: ['ft-seat','ft-miles'] },
+    ]
+  },
+  Maxi: {
+    label: 'Maximiliano Parra Velez', initials: 'MP', type: 'Menor (9 años)',
+    confirmed: true, isKid: true,
+    tags: ['Ref: BERSFJ', 'Tiquete: 1342152989227', '1 PC · 1 carry-on'],
+    tagTypes: ['ft-fare', 'ft-fare', 'ft-bag'],
+    segments: [
+      { num: 'Tramo 1 · Ida', code: 'AV9325', codeClass: '', from: 'MDE', fromCity: 'Medellín', to: 'BOG', toCity: 'Bogotá T1', dep: '18:55', depDate: '15 Jul 2026', arr: '19:55', arrDate: '15 Jul 2026', dur: '1h 00m', tags: ['Asiento: 15C', 'Classic'], tagTypes: ['ft-seat','ft-fare'] },
+      { num: 'Tramo 2 · Ida', code: 'AV120', codeClass: '', from: 'BOG', fromCity: 'Bogotá T1', to: 'LHR', toCity: 'Heathrow T2', dep: '23:25', depDate: '15 Jul 2026', arr: '15:35', arrDate: '16 Jul 2026', dur: '10h 10m', tags: ['Asiento: 9C', 'Classic · No reembolsable'], tagTypes: ['ft-seat','ft-fare'] },
+      { num: 'Tramo 3 · Regreso', code: 'AV121', codeClass: '', from: 'LHR', fromCity: 'Heathrow T2', to: 'BOG', toCity: 'Bogotá T1', dep: '22:05', depDate: '27 Jul 2026', arr: '03:10', arrDate: '28 Jul 2026', dur: '11h 05m', tags: ['Asiento: 10C', 'Flex · Reembolsable'], tagTypes: ['ft-seat','ft-miles'] },
+      { num: 'Tramo 4 · Regreso', code: 'AV9252', codeClass: '', from: 'BOG', fromCity: 'Bogotá T1', to: 'MDE', toCity: 'Medellín', dep: '05:20', depDate: '28 Jul 2026', arr: '06:20', arrDate: '28 Jul 2026', dur: '1h 00m', tags: ['Asiento: 5C', 'Flex'], tagTypes: ['ft-seat','ft-miles'] },
+    ]
+  },
+};
+
+// Alert only relevant for Valencia family
+const VALENCIA_ALERT = `<div class="tips-card" style="margin-bottom:16px;">
+  <div class="tips-title">⚠️ Atención — 15 Jul en Medellín</div>
+  <div class="tip-text">
+    <strong>Camila + Elena</strong> salen de MDE a las 19:40 (AV9337)<br>
+    <strong>Santiago</strong> sale de MDE a las 20:50 (AV8405) — <strong>vuelo diferente, 1 hora después</strong><br><br>
+    ✅ Se reencuentran en Bogotá y abordan juntos el <strong>AV120 a las 23:25</strong> hacia Heathrow.
+  </div>
+</div>`;
+
+const PARRA_ALERT = `<div class="tips-card" style="margin-bottom:16px;">
+  <div class="tips-title">✅ Familia Parra — 15 Jul en Medellín</div>
+  <div class="tip-text">
+    <strong>Camilo, Catalina y Maxi</strong> viajan juntos desde el primer tramo.<br>
+    Salen de MDE a las 18:55 (AV9325) — <strong>1 hora antes que la Familia Valencia</strong>.<br><br>
+    ✅ Ambas familias coinciden en BOG y abordan juntas el <strong>AV120 a las 23:25</strong> hacia Heathrow.<br>
+    ⭐ Tarifa de regreso: <strong>Flex</strong> — permite cambios y reembolso antes del vuelo.
+  </div>
+</div>`;
+
+function segmentHTML(seg) {
+  return `
+    <div class="flight-segment">
+      <div class="flight-seg-header">
+        <span class="flight-seg-num">${seg.num}</span>
+        <span class="flight-seg-code ${seg.codeClass||''}">${seg.code}</span>
+      </div>
+      <div class="flight-route">
+        <div class="flight-city">
+          <div class="flight-city-code">${seg.from}</div>
+          <div class="flight-city-name">${seg.fromCity}</div>
+        </div>
+        <div class="flight-arrow">
+          <div class="flight-arrow-line"></div>
+          <div class="flight-duration">${seg.dur}</div>
+        </div>
+        <div class="flight-city">
+          <div class="flight-city-code">${seg.to}</div>
+          <div class="flight-city-name">${seg.toCity}</div>
+        </div>
+      </div>
+      <div class="flight-times">
+        <div class="flight-time-block">
+          <span class="flight-time">${seg.dep}</span>
+          <span class="flight-date">${seg.depDate}</span>
+        </div>
+        <div class="flight-time-block">
+          <span class="flight-time">${seg.arr}</span>
+          <span class="flight-date">${seg.arrDate}</span>
+        </div>
+      </div>
+      <div class="flight-seat-row">
+        ${seg.tags.map((t,i) => `<span class="flight-tag ${seg.tagTypes[i]||'ft-fare'}">${t}</span>`).join('')}
+      </div>
+    </div>`;
+}
+
+function passengerHTML(p) {
+  if (!p.confirmed) {
+    return `<div class="pending-placeholder">
+      <div class="pending-icon">🎫</div>
+      <div class="pending-title">Tiquete de ${p.label} pendiente</div>
+      <div class="pending-subtitle">Comparte el PDF del tiquete y lo agrego con todos los detalles.</div>
+    </div>`;
+  }
+  return `
+    <div class="family-flights-block">
+      <div class="family-flights-header">
+        <div class="passenger-avatar ${p.isKid ? 'avatar-child' : 'avatar-adult'}">${p.initials}</div>
+        <div>
+          <div class="family-flights-name">${p.label}</div>
+          <div style="font-size:11px;color:var(--muted);">${p.type}</div>
+        </div>
+        <span class="family-confirmed-badge badge-confirmed">✓ Confirmado</span>
+      </div>
+      <div style="padding:6px 16px 4px;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--border);">
+        ${p.tags.map((t,i) => `<span class="flight-tag ${p.tagTypes[i]}">${t}</span>`).join('')}
+      </div>
+      <div class="flight-segments">
+        ${p.segments.map(segmentHTML).join('')}
+      </div>
+    </div>`;
+}
+
+function hotelHTML(family) {
+  // family: 'valencia', 'parra', 'both'
+  const locatorLine = family === 'both'
+    ? `<div class="hotel-info-row"><span class="hotel-info-icon">📋</span><span>Locator Valencia: <strong>24794515</strong> · Locator Parra: <strong>BERSFJ</strong> · Viva Orlando LLC</span></div>`
+    : family === 'valencia'
+    ? `<div class="hotel-info-row"><span class="hotel-info-icon">📋</span><span>Locator: <strong>24794515</strong> · Viva Orlando LLC</span></div>`
+    : `<div class="hotel-info-row"><span class="hotel-info-icon">📋</span><span>Locator: <strong>BERSFJ</strong> · Avianca / COP 17.364.101</span></div>`;
+  return `
+    <div class="travel-section-label">🏨 Alojamiento</div>
+    <div class="hotel-card">
+      <div class="hotel-badge">✅ Confirmado — Ambas familias</div>
+      <div class="hotel-name">${HOTEL.name}</div>
+      <div class="hotel-collection">${HOTEL.collection}</div>
+      <div class="hotel-details-grid">
+        <div class="hotel-detail-item"><div class="hotel-detail-label">Check-in</div><div class="hotel-detail-value gold">${HOTEL.checkin}</div></div>
+        <div class="hotel-detail-item"><div class="hotel-detail-label">Check-out</div><div class="hotel-detail-value gold">${HOTEL.checkout}</div></div>
+        <div class="hotel-detail-item"><div class="hotel-detail-label">Noches</div><div class="hotel-detail-value">${HOTEL.nights} noches</div></div>
+        <div class="hotel-detail-item"><div class="hotel-detail-label">Habitaciones</div><div class="hotel-detail-value">${HOTEL.rooms} hab.</div></div>
+      </div>
+      <div class="hotel-info-row"><span class="hotel-info-icon">📍</span><span>${HOTEL.address}</span></div>
+      <div class="hotel-info-row"><span class="hotel-info-icon">🛏️</span><span>${HOTEL.room}</span></div>
+      <div class="hotel-info-row"><span class="hotel-info-icon">🍳</span><span>${HOTEL.breakfast}</span></div>
+      ${locatorLine}
+      <div class="hotel-info-row"><span class="hotel-info-icon">⚠️</span><span>${HOTEL.policy}</span></div>
+      <div class="hotel-info-row"><span class="hotel-info-icon">📞</span><span>${HOTEL.phone}</span></div>
+      <a class="hotel-map-btn" href="${HOTEL.map}" target="_blank">📍 Ver en Google Maps</a>
+    </div>`;
+}
+
+function renderTravelTab() {
+  const el = document.getElementById('travelContent');
+  if (!el) return;
+
+  const VALENCIA = ['Santiago', 'Camila', 'Elena'];
+  const PARRA    = ['Camilo', 'Catalina', 'Maxi'];
+  let html = '';
+
+  if (currentPerson === 'todos') {
+    html += hotelHTML('both');
+    html += `<div class="travel-section-label">✈️ Familia Valencia</div>`;
+    VALENCIA.forEach(p => { html += passengerHTML(FLIGHTS[p]); });
+    html += VALENCIA_ALERT;
+    html += `<div class="travel-section-label">✈️ Familia Parra</div>`;
+    PARRA.forEach(p => { html += passengerHTML(FLIGHTS[p]); });
+    html += PARRA_ALERT;
+
+  } else if (VALENCIA.includes(currentPerson)) {
+    html += hotelHTML('valencia');
+    html += `<div class="travel-section-label">✈️ Tu vuelo</div>`;
+    html += passengerHTML(FLIGHTS[currentPerson]);
+    html += VALENCIA_ALERT;
+
+  } else if (PARRA.includes(currentPerson)) {
+    html += hotelHTML('parra');
+    html += `<div class="travel-section-label">✈️ Tu vuelo</div>`;
+    html += passengerHTML(FLIGHTS[currentPerson]);
+    html += PARRA_ALERT;
+  }
+
+  el.innerHTML = html;
+}
+
+// ===== COUNTDOWN =====
+const TRIP_DATE = new Date('2026-07-15T00:00:00');
+const TRIP_START_PLANNING = new Date('2026-04-19T00:00:00');
+
+const DAILY_TIPS = [
+  { emoji: '🛂', title: 'Visas UK', text: '<strong>Saca las visas YA.</strong> El proceso en Colombia toma 3-4 semanas. Necesitan pasaportes vigentes, extractos bancarios 3-6 meses, carta laboral y reserva de hotel. El Reino Unido entrega eVisa digital — no más sticker en el pasaporte.' },
+  { emoji: '⚡', title: 'Harry Potter URGENTE', text: '<strong>Reserva HOY el Warner Bros. Studio Tour.</strong> En julio con el evento del 25 aniversario se agota 8 semanas antes. No hay venta en taquilla. Entra a wbstudiotour.co.uk ahora mismo.' },
+  { emoji: '💳', title: 'Oyster Card', text: 'Saquen las <strong>Oyster Cards</strong> el primer día en cualquier estación del metro. Ahorran hasta un 40% vs billetes individuales. Alternativamente, su tarjeta de crédito contactless funciona igual — sin comisión.' },
+  { emoji: '🌦️', title: 'Clima en julio', text: 'En Londres en julio hace entre <strong>18–26°C</strong>, días larguísimos (el sol se pone a las 9pm). Lleven: ropa ligera, una chaqueta delgada, impermeable plegable y protector solar. ¡El sol sorprende!' },
+  { emoji: '🎭', title: 'Teatro West End', text: '¿Ya eligieron obra de teatro? El <strong>West End</strong> en julio tiene todo: El Rey León, Mamma Mia, Hamilton, Los Miserables. Compren tickets con 2-3 semanas de anticipación en londontheatredirect.com' },
+  { emoji: '📱', title: 'Apps imprescindibles', text: 'Descarguen antes de salir: <strong>Citymapper</strong> (metro y buses), <strong>Google Maps offline</strong> (descarguen Londres completo), <strong>Google Translate</strong> con inglés offline, y <strong>XE Currency</strong> para cambio £/COP.' },
+  { emoji: '🏥', title: 'Seguro médico', text: 'Contraten <strong>seguro de viaje internacional</strong> que cubra emergencias médicas en UK (el sistema NHS cobra a extranjeros). Para 12 días y 6 personas busquen opciones en Assist Card o Allianz. Incluir cancelación de viaje.' },
+  { emoji: '💰', title: 'Presupuesto', text: 'Para las 2 familias: <strong>Entradas £1,822 total</strong>, comida £1,070×2 = £2,140, transporte local £300×2 = £600. Total estimado: <strong>~£5,000 ambas familias</strong>. Pongan colchón del 15%.' },
+  { emoji: '🗺️', title: 'Zonas del hotel', text: 'Su hotel en <strong>Kensington / Earl\'s Court</strong> es perfecto — línea Piccadilly va directo al aeropuerto y al centro. A 10 min caminando: Natural History Museum, Science Museum, Harrods. ¡Ubicación de lujo!' },
+  { emoji: '🎒', title: 'Maletas y equipaje', text: 'Para 12 días con niños: <strong>1 maleta grande + 1 de mano por adulto</strong>. Para Maxi y Elena: mochila de día con snacks, agua, impermeable y entretenimiento en el avión. Heathrow Express acepta maletas grandes.' },
+  { emoji: '🍔', title: 'Comida con niños', text: 'En julio (vacaciones escolares UK) muchas cadenas tienen <strong>Kids Eat Free</strong>: PizzaExpress, Bill\'s, Giraffe, Bella Italia, Wagamama. Y Bread Street Kitchen de Gordon Ramsay: niños ≤10 GRATIS todos los días.' },
+  { emoji: '🏰', title: 'Torre de Londres', text: 'Reserva la <strong>Torre de Londres</strong> este mes — en julio es temporada alta. Online es más barato: £37 adulto, £18.50 niño. Las Joyas de la Corona tienen 3,000+ diamantes — Maxi y Elena van a alucinar.' },
+  { emoji: '📚', title: 'Preparar a los niños', text: 'Para motivar a <strong>Maxi y Elena</strong>: vean los documentales de Londres en YouTube, repasen los libros de Harry Potter, y cuéntenles sobre los dinosaurios del Natural History Museum. Niños emocionados = viaje mágico.' },
+  { emoji: '🚢', title: 'Thames Clipper', text: 'El <strong>Thames Clipper</strong> (barco público por el Támesis) es secreto de los londinenses. £10 por persona, conecta desde Westminster hasta Greenwich. Para Maxi y Elena ir en cubierta viendo el skyline es épico.' },
+  { emoji: '🌸', title: 'Stonehenge + Bath', text: 'Reserva ya el tour de <strong>Stonehenge + Bath</strong> con Evan Evans Tours (evanevanstours.com). Elegir la opción WITH Roman Baths (£129 adulto, £99 niño). Sale de Victoria Coach Station a las 8am.' },
+  { emoji: '👑', title: 'La Familia Real', text: '¿Sabían que en julio puede haber <strong>Changing of the Guard</strong> en Buckingham Palace? No es todos los días — revisen el calendario en householddivision.org.uk. Llegar 45 min antes para conseguir buen lugar.' },
+  { emoji: '🎠', title: 'Para los peques', text: 'Actividades TOP para Maxi y Elena (9 años): <strong>Diana Playground</strong> en Hyde Park (¡gratis!), HMS Belfast (buque interactivo), Science Museum Wonderlab, SEA LIFE Aquarium, Harry Potter Studio y Camden Market.' },
+  { emoji: '🔤', title: 'Inglés básico', text: 'Practiquen estas frases: "Could I have the bill please?" · "Where is the nearest tube station?" · "Table for six, please" · "Kids menu, please" Los londinenses son muy amables con turistas hispanohablantes.' },
+  { emoji: '☀️', title: 'Mejor época del año', text: '<strong>¡Julio es el mejor mes!</strong> El sol sale a las 5am y se pone a las 9:15pm — casi 16 horas de luz. Los parques están llenos, hay festivales gratuitos, y el ambiente es mágico para los niños.' },
+  { emoji: '🏦', title: 'Dinero y cambio', text: 'No cambien en el aeropuerto — la tasa es horrible. Usen cajeros automáticos de bancos locales (Barclays, Halifax) o paguen con tarjeta Visa/MC contactless. UK es prácticamente cashless.' },
+  { emoji: '🎵', title: 'Música en los parques', text: 'En julio hay <strong>conciertos gratuitos</strong> en Hyde Park (BST Hyde Park), Southbank Summer Festival y música en vivo en Covent Garden todos los días. Chequeen timeout.com/london.' },
+  { emoji: '🦁', title: 'Museo de Historia Natural', text: 'Lleguen <strong>antes de las 10am</strong> al Natural History Museum — es gratis pero se llena. La sala de dinosaurios con el esqueleto de diplodocus es ÉPICA para Maxi y Elena. El cráneo de T-Rex vale por todo el viaje.' },
+  { emoji: '🎪', title: 'Hamleys', text: '<strong>Hamleys</strong> en Regent Street tiene 7 plantas de juguetes — la tienda de juguetes más antigua del mundo (desde 1760). Para Maxi y Elena es EL sitio favorito del viaje. Pongan presupuesto antes de entrar 😂' },
+  { emoji: '🌊', title: 'Greenwich', text: 'En <strong>Greenwich</strong> Maxi y Elena pueden pararse con un pie en el Este y otro en el Oeste del mundo. Para niños de 9 años es fascinante. El DLR (tren sin conductor) — siéntense adelante.' },
+  { emoji: '🏡', title: 'Notting Hill', text: '<strong>Notting Hill</strong> es el barrio más fotogénico de Londres — casitas de colores, jardines perfectos. Paseen por Portobello Road Market (mejor los sábados), tomen un café en algún café del barrio.' },
+  { emoji: '📸', title: 'Fotos imprescindibles', text: 'Checklist: Tower Bridge, Big Ben, Buckingham Palace, Platform 9¾ con carrito, Notting Hill colorido, Phone box roja, double-decker bus, meridiano 0° en Greenwich, Maxi y Elena con Paddington Bear.' },
+  { emoji: '🔴', title: 'London Pass', text: 'Con 4-5 atracciones de pago conviene el <strong>London Pass</strong>. Para 2 familias de 3: ~£874 vs individual ~£1,647. Incluye Torre de Londres, London Eye, Westminster Abbey, St Paul\'s, Cutty Sark y 80+ más.' },
+  { emoji: '🌃', title: 'Londres de noche', text: 'En julio anochecer a las 9pm es perfecto para los niños. Vean la <strong>ciudad iluminada desde el Uber Boat</strong>, paseen por South Bank de noche, o tomen un pint en un pub histórico (los niños entran hasta las 9pm).' },
+  { emoji: '🧳', title: '2 semanas para el viaje', text: '¡Están a 2 semanas! Checklist final: ✅ 6 pasaportes ✅ 6 visas ✅ hotel confirmado ✅ Harry Potter reservado ✅ Oyster Cards planificadas ✅ seguro médico activo ✅ maletas a medio empacar. ¡Ya casi!' },
+  { emoji: '🎉', title: '¡Una semana!', text: '<strong>¡Una semana exacta!</strong> Familia Parra y Valencia — ya deben tener todo listo. Revisen: horarios de museos, Cambio de Guardia en el calendario, descarguen mapas offline de Londres, empaquen. ¡EL VIAJE ES REAL!' },
+  { emoji: '✈️', title: '¡Mañana viajan!', text: '🎉🎉🎉 <strong>¡MAÑANA ES EL GRAN DÍA!</strong> Camilo, Catalina, Maxi, Santiago, Camila y Elena — ¡BUENOS DÍAS LONDRES! Pasaportes en mano, Heathrow Express reservado, cargadores cargados. ¡LOS ESPERAN 12 DÍAS MÁGICOS!' },
+];
+
+const PHRASES = [
+  d => d > 90 ? `¡${d} días de pura anticipación! 🏰` : null,
+  d => d === 87 ? '¡87 días, exactamente el mismo número que plataforma 9¾... coincidencia? 🧙' : null,
+  d => d > 60 && d <= 87 ? `¡${d} días! El Big Ben ya te escucha tic-tac... ⏰` : null,
+  d => d === 60 ? '¡2 meses justos! Time to get excited! 🎉' : null,
+  d => d > 30 && d < 60 ? `${d} días y Londres ya sueña con ustedes 🇬🇧` : null,
+  d => d === 30 ? '¡UN MES EXACTO! Ya casi se huele el fish & chips 🐟' : null,
+  d => d > 14 && d < 30 ? `¡Solo ${d} días! ¡La Torre de Londres te espera! 🏰` : null,
+  d => d === 14 ? '¡DOS SEMANAS! ¿Ya empacaron algo? 🧳' : null,
+  d => d > 7 && d < 14 ? `¡${d} días! Harry Potter te está esperando en Leavesden 🧙` : null,
+  d => d === 7 ? '¡UNA SEMANA EXACTA! ¡CASI CASI! 🎊🎊🎊' : null,
+  d => d > 0 && d < 7 ? `¡¡Solo ${d} día${d===1?'':'s'}!! ¡YA CASI! ✈️🎉` : null,
+  d => d === 0 ? '🎉🎉🎉 ¡¡HOY VIAJAN!! ¡¡BUENOS DÍAS LONDRES!! 🎉🎉🎉' : null,
+  d => d < 0 ? '🇬🇧 ¡ESTÁN EN LONDRES! ¡DISFRÚTENLO AL MÁXIMO! 🏰' : null,
+];
+
+const MILESTONES = [
+  { label: '90 días', days: 90 }, { label: '60 días', days: 60 },
+  { label: '30 días', days: 30 }, { label: '2 semanas', days: 14 },
+  { label: '1 semana', days: 7 }, { label: '¡Mañana!', days: 1 },
+];
+
+function pad(n) { return String(Math.floor(n)).padStart(2, '0'); }
+function getDailyTip() {
+  const now = new Date();
+  const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+  return DAILY_TIPS[dayOfYear % DAILY_TIPS.length];
+}
+function getCountdownPhrase(d) {
+  for (const fn of PHRASES) { const r = fn(d); if (r !== null && r !== undefined) return r; }
+  return `¡${d} días para la aventura! 🌟`;
+}
+
+function buildStars() {
+  const container = document.getElementById('countdownStars');
+  if (!container) return;
+  for (let i = 0; i < 30; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.setProperty('--dur', (2 + Math.random() * 4) + 's');
+    s.style.setProperty('--delay', (Math.random() * 4) + 's');
+    s.style.setProperty('--max-op', (0.3 + Math.random() * 0.5).toFixed(2));
+    container.appendChild(s);
+  }
+}
+
+function buildMilestones(daysLeft) {
+  const el = document.getElementById('milestonesRow');
+  if (!el) return;
+  el.innerHTML = MILESTONES.map(m => {
+    const reached = daysLeft <= m.days;
+    return `<span class="milestone ${reached ? 'reached' : 'pending'}">${reached ? '✓ ' : ''}${m.label}</span>`;
+  }).join('');
+}
+
+function launchConfetti() {
+  const colors = ['#C8102E','#012169','#C9A84C','#ffffff','#ff6b6b','#4ecdc4'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.top = '-20px';
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.setProperty('--dur', (2 + Math.random() * 3) + 's');
+    el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    el.style.width = el.style.height = (6 + Math.random() * 8) + 'px';
+    el.style.animationDelay = (Math.random() * 1.5) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 6000);
+  }
+}
+
+let lastDaysLeft = null;
+
+function updateCountdown() {
+  const now = new Date();
+  const diff = TRIP_DATE - now;
+  const daysLeft = Math.floor(diff / 86400000);
+
+  if (diff < 0) {
+    ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => document.getElementById(id).textContent = '🎉');
+    document.getElementById('cdPhrase').innerHTML = '<span>🇬🇧 ¡¡ESTÁN EN LONDRES!! ¡DISFRÚTENLO! 🏰</span>';
+    return;
+  }
+
+  document.getElementById('cd-days').textContent = daysLeft;
+  document.getElementById('cd-hours').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+  document.getElementById('cd-mins').textContent = pad(Math.floor((diff % 3600000) / 60000));
+  document.getElementById('cd-secs').textContent = pad(Math.floor((diff % 60000) / 1000));
+
+  if (daysLeft !== lastDaysLeft) {
+    document.getElementById('cdPhrase').innerHTML = `<span>${getCountdownPhrase(daysLeft)}</span>`;
+    buildMilestones(daysLeft);
+    const totalDays = Math.floor((TRIP_DATE - TRIP_START_PLANNING) / 86400000);
+    const pct = Math.min(100, Math.max(0, Math.round((totalDays - daysLeft) / totalDays * 100)));
+    document.getElementById('tripProgressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = pct + '% del camino';
+    if ([90, 60, 30, 14, 7, 1, 0].includes(daysLeft) && lastDaysLeft !== null) launchConfetti();
+    lastDaysLeft = daysLeft;
+  }
+}
+
+function initCountdown() {
+  buildStars();
+  const tip = getDailyTip();
+  const now = new Date();
+  document.getElementById('dailyTipText').innerHTML = `${tip.emoji} <strong>${tip.title}:</strong> ${tip.text}`;
+  document.getElementById('tipDayLabel').textContent = now.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' });
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+}
+
+// ===== INIT =====
+buildDayNav();
+renderDayContent();
+updateGlobalProgress();
+buildReserves();
+renderTravelTab();
+initCountdown();
+</script>
+</body>
+</html>
