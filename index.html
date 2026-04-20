@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🇬🇧 London Trip — Julio 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <style>
   :root {
     --red: #C8102E;
@@ -1545,6 +1543,22 @@ function buildReserves() {
   `).join('');
 }
 
+let leafletLoaded = false;
+
+function loadLeafletThenRender() {
+  if (leafletLoaded) { renderMapTab(); return; }
+  // Inject CSS
+  const css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  document.head.appendChild(css);
+  // Inject JS
+  const js = document.createElement('script');
+  js.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  js.onload = () => { leafletLoaded = true; renderMapTab(); };
+  document.head.appendChild(js);
+}
+
 function switchTab(tab, btn) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1552,9 +1566,8 @@ function switchTab(tab, btn) {
   btn.classList.add('active');
   if (tab === 'travel') renderTravelTab();
   if (tab === 'map') {
-    renderMapTab();
-    // Give Leaflet time to see the visible container, then invalidate size
-    setTimeout(() => { if (leafletMapInstance) leafletMapInstance.invalidateSize(); }, 100);
+    loadLeafletThenRender();
+    setTimeout(() => { if (leafletMapInstance) leafletMapInstance.invalidateSize(); }, 300);
   }
 }
 
@@ -1790,15 +1803,8 @@ function renderMapTab() {
     </div>
   `;
 
-  // Init Leaflet after DOM is ready — wait for L to be available
-  const tryInit = (attempts) => {
-    if (typeof L !== 'undefined') {
-      initLeafletMap(mapId, places, centerLat, centerLng, zoom);
-    } else if (attempts > 0) {
-      setTimeout(() => tryInit(attempts - 1), 200);
-    }
-  };
-  setTimeout(() => tryInit(10), 150);
+  // Leaflet is guaranteed loaded at this point
+  setTimeout(() => initLeafletMap(mapId, places, centerLat, centerLng, zoom), 150);
 }
 
 let leafletMapInstance = null;
@@ -2268,7 +2274,6 @@ renderDayContent();
 updateGlobalProgress();
 buildReserves();
 renderTravelTab();
-renderMapTab();
 initCountdown();
 </script>
 </body>
