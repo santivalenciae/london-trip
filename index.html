@@ -1551,7 +1551,11 @@ function switchTab(tab, btn) {
   document.getElementById('tab-' + tab).classList.add('active');
   btn.classList.add('active');
   if (tab === 'travel') renderTravelTab();
-  if (tab === 'map') renderMapTab();
+  if (tab === 'map') {
+    renderMapTab();
+    // Give Leaflet time to see the visible container, then invalidate size
+    setTimeout(() => { if (leafletMapInstance) leafletMapInstance.invalidateSize(); }, 100);
+  }
 }
 
 // ===== MAP DATA =====
@@ -1787,7 +1791,7 @@ function renderMapTab() {
   `;
 
   // Init Leaflet after DOM is ready
-  setTimeout(() => initLeafletMap(mapId, places, centerLat, centerLng, zoom), 50);
+  setTimeout(() => initLeafletMap(mapId, places, centerLat, centerLng, zoom), 150);
 }
 
 let leafletMapInstance = null;
@@ -2257,6 +2261,7 @@ renderDayContent();
 updateGlobalProgress();
 buildReserves();
 renderTravelTab();
+renderMapTab();
 initCountdown();
 </script>
 </body>
