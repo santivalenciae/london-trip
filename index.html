@@ -930,9 +930,9 @@ const KID_ACTIVITIES = {
   // dayIndex: [activityIndexes]
   0: [2],           // Paseo de reconocimiento
   1: [0,1,2,3,4],   // London Eye, Aquarium, Big Ben, St James's, Buckingham
-  2: [0,1],         // Harry Potter, Wembley
+  2: [0,1,2,3],     // Torre, Tower Bridge, HMS Belfast, Sky Garden
   3: [0,1,2],       // Natural History, Science, Harrods
-  4: [0,1,2,3],     // Torre, Tower Bridge, HMS Belfast, Sky Garden
+  4: [0,1],         // Harry Potter, Wembley
   5: [1,2,3,4],     // Diana Playground, Serpentine, Notting Hill, Portobello
   6: [0,1,2,3],     // Platform 9¾, Oxford, Christ Church, Bodleian
   7: [0,1,2],       // British Museum, Oxford St, Hamleys
@@ -946,9 +946,9 @@ const KID_ACTIVITIES = {
 const KID_TIPS = [
   "🧒 Maxi y Elena: ¡Esta noche coman en Nando's! Los niños piden su propio menú y adoran los colores de la decoración. Dígales que mañana empieza la aventura.",
   "⭐ Para los peques: el London Eye tarda 30 minutos en dar una vuelta completa — pueden ir buscando los lugares que reconocen desde arriba. ¿Cuántos puentes del Támesis ven?",
-  "🧙 ¡El DÍA MÁS ESPERADO de Maxi y Elena! En el Warner Bros. Studio pueden ver la cama de Harry bajo la escalera, tocar los Horrocruxes y tomar un Butterbeer frío. ¡Lleguen a las 10am para aprovechar todo!",
-  "🦕 En el Natural History Museum hay un esqueleto gigante de diplodocus en la entrada principal. Reto para los niños: ¿cuántos huesos distintos de dinosaurio encuentran en la sala de dinos?",
   "👑 Las Joyas de la Corona en la Torre de Londres son lo más impresionante — la corona tiene más de 3,000 diamantes. ¡Cuenten los guardias Beefeater que encuentran!",
+  "🦕 En el Natural History Museum hay un esqueleto gigante de diplodocus en la entrada principal. Reto para los niños: ¿cuántos huesos distintos de dinosaurio encuentran en la sala de dinos?",
+  "🧙 ¡El DÍA MÁS ESPERADO de Maxi y Elena! En el Warner Bros. Studio pueden ver la cama de Harry bajo la escalera, tocar los Horrocruxes y tomar un Butterbeer frío. ¡Lleguen a las 10am para aprovechar todo!",
   "🛶 El bote en The Serpentine es ÉPICO para los niños — pueden remar ellos mismos (con ayuda). Y el Diana Playground tiene un barco pirata de madera enorme. Lleven ropa para mojar.",
   "🚂 En la plataforma 9¾ hay un carrito mágico atravesando la pared — la foto oficial sale perfecta. Recuerden comprar algo en la tienda oficial de Harry Potter dentro de King's Cross.",
   "🧸 Hamleys es LA juguetería más antigua del mundo (desde 1760). Tip de supervivencia: pongan un límite de £20 por niño para souvenir antes de entrar. Los 7 pisos son abrumadores.",
@@ -987,15 +987,19 @@ const DAYS = [
     tip: "Pendiente confirmar horario de cambio de guardia en buckinghampalace.royal.uk"
   },
   {
-    num: 3, fecha: "Jul 18", label: "18 Jul", theme: "Harry Potter 🧙",
-    badge: "Excursión",
+    num: 3, fecha: "Jul 18", label: "18 Jul", theme: "Realeza y Torre",
+    badge: "Día 3",
     activities: [
-      { name: "Warner Bros. Studio Tour — The Making of Harry Potter 🌟🌟", tag: "paid", note: "⚠️ RESERVAR YA — se agota. £56 adulto, £45 niño. Evento especial 'First Year at Hogwarts' (hasta sep 2026 — 25 aniversario). Llegar a las 10am para aprovechar todo el día", metro: "Euston → tren a Watford Junction + bus shuttle", map: "https://maps.google.com/?q=Warner+Bros+Studio+Tour+Leavesden" },
-      { name: "Estadio de Wembley (de camino)", tag: "free", note: "Vista exterior del estadio más famoso de Inglaterra — foto desde afuera", metro: "Wembley Park", map: "https://maps.google.com/?q=Wembley+Stadium+London" }
+      { name: "Torre de Londres 🌟", tag: "paid", note: "£37 adulto, £18.50 niño — Reservar online, horario 9:30am. Las Joyas de la Corona tienen 3,000+ diamantes. Los Beefeaters hacen tours gratuitos", metro: "Tower Hill (District/Circle)", map: "https://maps.google.com/?q=Tower+of+London" },
+      { name: "Tower Bridge 🌉", tag: "paid", note: "£16 adulto, £8 niño — Cruzar el puente y subir a la Exhibition. El suelo de cristal tiene vistas al Támesis desde arriba", metro: "Tower Hill / London Bridge", map: "https://maps.google.com/?q=Tower+Bridge+London" },
+      { name: "HMS Belfast ⚓", tag: "paid", note: "Buque de guerra interactivo flotante en el Támesis — los niños pueden explorar todos los compartimentos del barco", metro: "London Bridge (Jubilee/Northern)", map: "https://maps.google.com/?q=HMS+Belfast+London" },
+      { name: "Sky Garden", tag: "free", note: "Reservar GRATIS con 3 semanas de antelación — skygarden.london. Vistas espectaculares desde el piso 35", metro: "Monument / Bank", map: "https://maps.google.com/?q=Sky+Garden+London" },
+      { name: "St Paul's Cathedral", tag: "paid", note: "£20 adulto, £8 niño — La catedral más emblemática de Londres. La Galería de los Susurros tiene acústica mágica", metro: "St Paul's (Central)", map: "https://maps.google.com/?q=St+Paul%27s+Cathedral+London" },
+      { name: "The Shard — vista exterior", tag: "free", note: "Alternativa gratuita al mirador: foto desde fuera o Oblix bar planta 32", metro: "London Bridge", map: "https://maps.google.com/?q=The+Shard+London" }
     ],
-    food: "☕ Café del Studio Tour — Butterbeer 🍺 (frío o caliente) + fish & chips\n🍽️ Restaurante temático dentro del estudio — comer rodeados de decorados de HP",
-    cost: "£56×2 adultos + £45×1 niño = £157 por familia · Shuttle £40pp aprox",
-    tip: "¡No hay venta en taquilla! Reservar en wbstudiotour.co.uk ahora mismo."
+    food: "🍖 Bread Street Kitchen (Gordon Ramsay) — ¡Niños ≤10 años comen GRATIS!\n🍳 Bill's London Bridge — All-day, menú niños fish fingers + postre\n🛒 Borough Market — boroughmarket.org.uk — el mejor mercado gastronómico\n🚢 Regreso: Uber Boat desde London Bridge (¡mágico al atardecer!)",
+    cost: "$180 (Entradas Torre + cena por familia)",
+    tip: "Tomen el Uber Boat al atardecer — ver la ciudad iluminada desde el Támesis es uno de los mejores momentos del viaje."
   },
   {
     num: 4, fecha: "Jul 19", label: "19 Jul", theme: "Ciencia y Museos",
@@ -1010,19 +1014,15 @@ const DAYS = [
     tip: "Los tres museos de South Kensington están uno al lado del otro — perfecto para un día completo sin gastar en entradas."
   },
   {
-    num: 5, fecha: "Jul 20", label: "20 Jul", theme: "Realeza y Torre",
-    badge: "Día 5",
+    num: 5, fecha: "Jul 20", label: "20 Jul", theme: "Harry Potter 🧙",
+    badge: "Excursión",
     activities: [
-      { name: "Torre de Londres 🌟", tag: "paid", note: "£37 adulto, £18.50 niño — Reservar online, horario 9:30am. Las Joyas de la Corona tienen 3,000+ diamantes. Los Beefeaters hacen tours gratuitos", metro: "Tower Hill (District/Circle)", map: "https://maps.google.com/?q=Tower+of+London" },
-      { name: "Tower Bridge 🌉", tag: "paid", note: "£16 adulto, £8 niño — Cruzar el puente y subir a la Exhibition. El suelo de cristal tiene vistas al Támesis desde arriba", metro: "Tower Hill / London Bridge", map: "https://maps.google.com/?q=Tower+Bridge+London" },
-      { name: "HMS Belfast ⚓", tag: "paid", note: "Buque de guerra interactivo flotante en el Támesis — los niños pueden explorar todos los compartimentos del barco", metro: "London Bridge (Jubilee/Northern)", map: "https://maps.google.com/?q=HMS+Belfast+London" },
-      { name: "Sky Garden", tag: "free", note: "Reservar GRATIS con 3 semanas de antelación — skygarden.london. Vistas espectaculares desde el piso 35", metro: "Monument / Bank", map: "https://maps.google.com/?q=Sky+Garden+London" },
-      { name: "St Paul's Cathedral", tag: "paid", note: "£20 adulto, £8 niño — La catedral más emblemática de Londres. La Galería de los Susurros tiene acústica mágica", metro: "St Paul's (Central)", map: "https://maps.google.com/?q=St+Paul%27s+Cathedral+London" },
-      { name: "The Shard — vista exterior", tag: "free", note: "Alternativa gratuita al mirador: foto desde fuera o Oblix bar planta 32", metro: "London Bridge", map: "https://maps.google.com/?q=The+Shard+London" }
+      { name: "Warner Bros. Studio Tour — The Making of Harry Potter 🌟🌟", tag: "paid", note: "⚠️ RESERVAR YA — se agota. £56 adulto, £45 niño. Evento especial 'First Year at Hogwarts' (hasta sep 2026 — 25 aniversario). Llegar a las 10am para aprovechar todo el día", metro: "Euston → tren a Watford Junction + bus shuttle", map: "https://maps.google.com/?q=Warner+Bros+Studio+Tour+Leavesden" },
+      { name: "Estadio de Wembley (de camino)", tag: "free", note: "Vista exterior del estadio más famoso de Inglaterra — foto desde afuera", metro: "Wembley Park", map: "https://maps.google.com/?q=Wembley+Stadium+London" }
     ],
-    food: "🍖 Bread Street Kitchen (Gordon Ramsay) — ¡Niños ≤10 años comen GRATIS!\n🍳 Bill's London Bridge — All-day, menú niños fish fingers + postre\n🛒 Borough Market — boroughmarket.org.uk — el mejor mercado gastronómico\n🚢 Regreso: Uber Boat desde London Bridge (¡mágico al atardecer!)",
-    cost: "$180 (Entradas Torre + cena por familia)",
-    tip: "Tomen el Uber Boat al atardecer — ver la ciudad iluminada desde el Támesis es uno de los mejores momentos del viaje."
+    food: "☕ Café del Studio Tour — Butterbeer 🍺 (frío o caliente) + fish & chips\n🍽️ Restaurante temático dentro del estudio — comer rodeados de decorados de HP",
+    cost: "£56×2 adultos + £45×1 niño = £157 por familia · Shuttle £40pp aprox",
+    tip: "¡No hay venta en taquilla! Reservar en wbstudiotour.co.uk ahora mismo."
   },
   {
     num: 6, fecha: "Jul 21", label: "21 Jul", theme: "Parques y Notting Hill",
