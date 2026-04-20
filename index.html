@@ -569,7 +569,167 @@
   .milestone.reached { background: rgba(201,168,76,0.2); border-color: var(--gold); color: var(--gold); }
   .milestone.pending { background: transparent; border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.3); }
 
-  /* ===== VUELOS & HOTEL TAB ===== */
+  /* ===== MAPA TAB ===== */
+  .map-day-header {
+    background: var(--navy);
+    color: white;
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .map-day-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .map-day-subtitle {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 3px;
+  }
+  .map-day-badge {
+    background: var(--gold);
+    color: var(--dark);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .map-today-badge {
+    background: #10b981;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    margin-top: 4px;
+  }
+  .map-nav-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    align-items: center;
+  }
+  .map-nav-btn {
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: white;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .map-nav-btn:hover { background: var(--navy); color: white; border-color: var(--navy); }
+  .map-nav-btn:disabled { opacity: 0.35; cursor: default; }
+  .map-day-select {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    background: white;
+    cursor: pointer;
+  }
+  .map-iframe-wrap {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid var(--border);
+    box-shadow: var(--shadow);
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .map-iframe-wrap iframe {
+    display: block;
+    border: none;
+    width: 100%;
+    height: 400px;
+  }
+  .map-stops-list {
+    background: white;
+    border-radius: 14px;
+    border: 2px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .map-stops-title {
+    padding: 12px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(250,247,240,0.5);
+  }
+  .map-stop-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text);
+    transition: background 0.15s;
+  }
+  .map-stop-item:last-child { border-bottom: none; }
+  .map-stop-item:hover { background: rgba(1,33,105,0.04); }
+  .map-stop-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .map-stop-name {
+    font-size: 13px;
+    font-weight: 600;
+    flex: 1;
+    line-height: 1.3;
+  }
+  .map-stop-tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 8px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .map-open-btn {
+    font-size: 18px;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+  .map-pre-trip {
+    background: rgba(245,158,11,0.08);
+    border: 2px solid rgba(245,158,11,0.3);
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .map-pre-trip-emoji { font-size: 36px; margin-bottom: 8px; }
+  .map-pre-trip-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .map-pre-trip-sub { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
   .travel-section-label {
     font-size: 11px; font-weight: 700; color: var(--muted);
     text-transform: uppercase; letter-spacing: 1.5px; margin: 24px 0 10px;
@@ -917,35 +1077,7 @@
 
 <!-- TAB: MAPA -->
 <div id="tab-map" class="view">
-  <div class="main">
-    <div class="section-label">🗺️ Mapa del viaje — 52 puntos · 12 días</div>
-    <div style="
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 2px solid var(--border);
-      box-shadow: var(--shadow);
-      margin-bottom: 12px;
-    ">
-      <iframe
-        src="https://www.google.com/maps/d/embed?mid=1KNmjfvsC8BJRyC1_u1a3zogunxsxrwk&ehbc=2E312F"
-        width="100%"
-        height="520"
-        style="display:block; border:none;"
-        allowfullscreen
-        loading="lazy">
-      </iframe>
-    </div>
-    <div class="tips-card">
-      <div class="tips-title">💡 Cómo usar el mapa</div>
-      <div class="tip-text">
-        🎨 Cada color representa un día del itinerario — toca cualquier pin para ver el nombre y descripción<br><br>
-        🔍 Pellizca para hacer zoom · Arrastra para moverte por el mapa<br><br>
-        📍 Toca un pin y luego <strong>"Ver en Google Maps"</strong> para abrir navegación directa<br><br>
-        🏨 El pin del hotel está marcado como referencia central del viaje
-      </div>
-    </div>
-  </div>
+  <div class="main" id="mapContent"></div>
 </div>
 
 <!-- TAB: VUELOS & HOTEL -->
@@ -1417,6 +1549,246 @@ function switchTab(tab, btn) {
   document.getElementById('tab-' + tab).classList.add('active');
   btn.classList.add('active');
   if (tab === 'travel') renderTravelTab();
+  if (tab === 'map') renderMapTab();
+}
+
+// ===== MAP DATA =====
+// Coordinates for each activity per day
+const MAP_DAYS = [
+  { // Día 1 - Jul 16
+    places: [
+      { name: 'Aeropuerto Heathrow', lat: 51.4700, lng: -0.4543, tag: 'Llegada' },
+      { name: 'Hotel Mornington Kensington', lat: 51.4902, lng: -0.1954, tag: 'Hotel' },
+      { name: 'Earl\'s Court — Reconocimiento', lat: 51.4912, lng: -0.1934, tag: 'Paseo' },
+    ]
+  },
+  { // Día 2 - Jul 17
+    places: [
+      { name: 'London Eye', lat: 51.5033, lng: -0.1195, tag: 'Pago' },
+      { name: 'SEA LIFE Aquarium', lat: 51.5021, lng: -0.1196, tag: 'Pago' },
+      { name: 'Big Ben & Parlamento', lat: 51.4994, lng: -0.1245, tag: 'Gratis' },
+      { name: 'St James\'s Park', lat: 51.5024, lng: -0.1340, tag: 'Gratis' },
+      { name: 'Buckingham Palace', lat: 51.5014, lng: -0.1419, tag: 'Gratis' },
+      { name: 'Downing Street', lat: 51.5034, lng: -0.1276, tag: 'Gratis' },
+    ]
+  },
+  { // Día 3 - Jul 18
+    places: [
+      { name: 'Torre de Londres', lat: 51.5081, lng: -0.0759, tag: 'Pago' },
+      { name: 'Tower Bridge', lat: 51.5055, lng: -0.0754, tag: 'Pago' },
+      { name: 'HMS Belfast', lat: 51.5065, lng: -0.0817, tag: 'Pago' },
+      { name: 'Sky Garden', lat: 51.5112, lng: -0.0837, tag: 'Gratis' },
+      { name: 'St Paul\'s Cathedral', lat: 51.5138, lng: -0.0984, tag: 'Pago' },
+      { name: 'The Shard', lat: 51.5045, lng: -0.0865, tag: 'Gratis' },
+    ]
+  },
+  { // Día 4 - Jul 19
+    places: [
+      { name: 'Museo Historia Natural', lat: 51.4967, lng: -0.1764, tag: 'Gratis' },
+      { name: 'Museo de la Ciencia', lat: 51.4978, lng: -0.1748, tag: 'Gratis' },
+      { name: 'Harrods', lat: 51.4994, lng: -0.1633, tag: 'Paseo' },
+    ]
+  },
+  { // Día 5 - Jul 20
+    places: [
+      { name: 'Warner Bros. Studio Tour', lat: 51.6902, lng: -0.4132, tag: 'Pago' },
+      { name: 'Estadio de Wembley', lat: 51.5560, lng: -0.2796, tag: 'Gratis' },
+    ]
+  },
+  { // Día 6 - Jul 21
+    places: [
+      { name: 'Hyde Park', lat: 51.5073, lng: -0.1657, tag: 'Gratis' },
+      { name: 'Diana Memorial Playground', lat: 51.5063, lng: -0.1880, tag: 'Gratis' },
+      { name: 'The Serpentine', lat: 51.5054, lng: -0.1659, tag: 'Pago' },
+      { name: 'Notting Hill', lat: 51.5130, lng: -0.1969, tag: 'Gratis' },
+      { name: 'Portobello Road Market', lat: 51.5171, lng: -0.2040, tag: 'Gratis' },
+    ]
+  },
+  { // Día 7 - Jul 22
+    places: [
+      { name: 'Platform 9¾ — King\'s Cross', lat: 51.5322, lng: -0.1240, tag: 'Gratis' },
+      { name: 'Christ Church Oxford', lat: 51.7501, lng: -1.2565, tag: 'Pago' },
+      { name: 'Bodleian Library Oxford', lat: 51.7540, lng: -1.2544, tag: 'Pago' },
+      { name: 'Centro histórico Oxford', lat: 51.7520, lng: -1.2577, tag: 'Paseo' },
+    ]
+  },
+  { // Día 8 - Jul 23
+    places: [
+      { name: 'British Museum', lat: 51.5194, lng: -0.1270, tag: 'Gratis' },
+      { name: 'Oxford Street', lat: 51.5152, lng: -0.1416, tag: 'Compras' },
+      { name: 'Hamleys', lat: 51.5130, lng: -0.1408, tag: 'Compras' },
+      { name: 'Bond Street', lat: 51.5142, lng: -0.1494, tag: 'Paseo' },
+    ]
+  },
+  { // Día 9 - Jul 24
+    places: [
+      { name: 'National Gallery', lat: 51.5089, lng: -0.1283, tag: 'Gratis' },
+      { name: 'Trafalgar Square', lat: 51.5080, lng: -0.1281, tag: 'Gratis' },
+      { name: 'Piccadilly Circus', lat: 51.5101, lng: -0.1340, tag: 'Gratis' },
+      { name: 'London Transport Museum', lat: 51.5118, lng: -0.1228, tag: 'Pago' },
+      { name: 'Covent Garden', lat: 51.5117, lng: -0.1240, tag: 'Gratis' },
+      { name: 'LEGO Store Leicester Sq', lat: 51.5108, lng: -0.1289, tag: 'Compras' },
+      { name: 'Chinatown London', lat: 51.5118, lng: -0.1318, tag: 'Gratis' },
+    ]
+  },
+  { // Día 10 - Jul 25
+    places: [
+      { name: 'Thames Clipper — Embankment', lat: 51.5074, lng: -0.1223, tag: 'Pago' },
+      { name: 'Cutty Sark', lat: 51.4831, lng: -0.0094, tag: 'Pago' },
+      { name: 'Royal Observatory Greenwich', lat: 51.4769, lng: -0.0005, tag: 'Pago' },
+      { name: 'National Maritime Museum', lat: 51.4816, lng: -0.0055, tag: 'Gratis' },
+      { name: 'Shakespeare\'s Globe', lat: 51.5081, lng: -0.0972, tag: 'Gratis' },
+      { name: 'Southbank', lat: 51.5059, lng: -0.1125, tag: 'Paseo' },
+    ]
+  },
+  { // Día 11 - Jul 26
+    places: [
+      { name: 'Stonehenge', lat: 51.1789, lng: -1.8262, tag: 'Excursión' },
+      { name: 'Roman Baths — Bath', lat: 51.3814, lng: -2.3590, tag: 'Excursión' },
+      { name: 'Bath Abbey', lat: 51.3815, lng: -2.3583, tag: 'Gratis' },
+    ]
+  },
+  { // Día 12 - Jul 27
+    places: [
+      { name: 'Estatua Paddington Bear', lat: 51.5165, lng: -0.1764, tag: 'Gratis' },
+      { name: 'Little Venice', lat: 51.5218, lng: -0.1868, tag: 'Pago' },
+      { name: 'Madame Tussauds', lat: 51.5233, lng: -0.1558, tag: 'Pago' },
+      { name: 'Camden Market', lat: 51.5415, lng: -0.1463, tag: 'Gratis' },
+      { name: 'Regent\'s Park', lat: 51.5313, lng: -0.1570, tag: 'Gratis' },
+    ]
+  },
+];
+
+const TRIP_START = new Date('2026-07-16');
+const TRIP_END   = new Date('2026-07-27');
+const TAG_COLORS = { 'Pago':'#C8102E', 'Gratis':'#059669', 'Paseo':'#2563eb', 'Compras':'#7c3aed', 'Excursión':'#9333ea', 'Hotel':'#012169', 'Llegada':'#6b7280' };
+
+let currentMapDay = 0;
+
+function getTodayMapDay() {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const start = new Date('2026-07-16');
+  const diff = Math.floor((today - start) / 86400000);
+  if (diff < 0) return 0;
+  if (diff > 11) return 11;
+  return diff;
+}
+
+function buildGoogleMapsUrl(places) {
+  if (places.length === 0) return '#';
+  if (places.length === 1) {
+    return `https://www.google.com/maps/search/?api=1&query=${places[0].lat},${places[0].lng}`;
+  }
+  const origin = `${places[0].lat},${places[0].lng}`;
+  const dest   = `${places[places.length-1].lat},${places[places.length-1].lng}`;
+  const waypoints = places.slice(1, -1).map(p => `${p.lat},${p.lng}`).join('|');
+  let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}&travelmode=walking`;
+  if (waypoints) url += `&waypoints=${waypoints}`;
+  return url;
+}
+
+function buildStaticMapUrl(places) {
+  const base = 'https://maps.googleapis.com/maps/api/staticmap';
+  // Use OpenStreetMap via embed instead — free, no key needed
+  // We'll use an iframe with Google Maps embed search
+  return null;
+}
+
+function renderMapTab() {
+  const el = document.getElementById('mapContent');
+  if (!el) return;
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const tripStart = new Date('2026-07-16');
+  const tripEnd   = new Date('2026-07-27');
+  const isPreTrip = today < tripStart;
+  const isPostTrip = today > tripEnd;
+
+  // Auto-select today's day on first render
+  if (currentMapDay === 0 && !isPreTrip && !isPostTrip) {
+    currentMapDay = getTodayMapDay();
+  }
+
+  const dayData  = DAYS[currentMapDay];
+  const mapDay   = MAP_DAYS[currentMapDay];
+  const places   = mapDay.places;
+  const isToday  = !isPreTrip && !isPostTrip && getTodayMapDay() === currentMapDay;
+
+  // Build Google Maps directions URL
+  const mapsUrl = buildGoogleMapsUrl(places);
+
+  // Build embed URL centered on first place
+  const centerLat = places.reduce((s,p) => s + p.lat, 0) / places.length;
+  const centerLng = places.reduce((s,p) => s + p.lng, 0) / places.length;
+  // Embed with all markers via Google Maps embed (free, no key)
+  const markers = places.map((p,i) => `markers=color:${encodeURIComponent(TAG_COLORS[p.tag]||'red')}%7Clabel:${i+1}%7C${p.lat},${p.lng}`).join('&');
+
+  // Use OpenStreetMap embed (Leaflet would need CDN — use direct Google Maps embed link)
+  const embedUrl = `https://maps.google.com/maps?q=${centerLat},${centerLng}&z=${currentMapDay === 10 ? 7 : currentMapDay === 6 ? 9 : 14}&output=embed`;
+
+  const stopTags = { 'Pago':'tag-paid', 'Gratis':'tag-free', 'Paseo':'tag-walk', 'Compras':'tag-walk', 'Excursión':'tag-excur', 'Hotel':'tag-walk', 'Llegada':'tag-walk' };
+
+  const stopsHtml = places.map((p, i) => `
+    <a class="map-stop-item" href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}" target="_blank">
+      <div class="map-stop-num" style="background:${TAG_COLORS[p.tag]||'#012169'}">${i+1}</div>
+      <div class="map-stop-name">${p.name}</div>
+      <span class="map-stop-tag act-tag ${stopTags[p.tag]||'tag-walk'}">${p.tag}</span>
+      <span class="map-open-btn">↗</span>
+    </a>
+  `).join('');
+
+  const dayOptions = DAYS.map((d,i) => `<option value="${i}" ${i===currentMapDay?'selected':''}>${d.label} — ${d.theme}</option>`).join('');
+
+  el.innerHTML = `
+    ${isPreTrip ? `<div class="map-pre-trip">
+      <div class="map-pre-trip-emoji">✈️</div>
+      <div class="map-pre-trip-title">¡El viaje comienza el 16 de julio!</div>
+      <div class="map-pre-trip-sub">Mientras tanto puedes explorar el recorrido de cada día.</div>
+    </div>` : ''}
+
+    <div class="map-day-header">
+      <div>
+        <div class="map-day-title">${dayData.theme}</div>
+        <div class="map-day-subtitle">Día ${dayData.num} · ${dayData.fecha} · ${places.length} paradas</div>
+        ${isToday ? '<div class="map-today-badge">📍 HOY</div>' : ''}
+      </div>
+      <div class="map-day-badge">${dayData.fecha}</div>
+    </div>
+
+    <div class="map-nav-row">
+      <button class="map-nav-btn" onclick="changeMapDay(-1)" ${currentMapDay===0?'disabled':''}>← Anterior</button>
+      <select class="map-day-select" onchange="changeMapDay(parseInt(this.value) - currentMapDay)">
+        ${dayOptions}
+      </select>
+      <button class="map-nav-btn" onclick="changeMapDay(1)" ${currentMapDay===11?'disabled':''}>Siguiente →</button>
+    </div>
+
+    <div class="map-iframe-wrap">
+      <iframe src="${embedUrl}" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+
+    <a href="${mapsUrl}" target="_blank" style="
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--navy); color: white; border-radius: 12px;
+      padding: 13px; margin-bottom: 12px; text-decoration: none;
+      font-weight: 700; font-size: 14px; letter-spacing: 0.3px;
+      transition: background 0.2s;
+    " onmouseover="this.style.background='#C8102E'" onmouseout="this.style.background='#012169'">
+      🗺️ Abrir ruta completa del día en Google Maps
+    </a>
+
+    <div class="map-stops-list">
+      <div class="map-stops-title">📍 Paradas del día — toca para navegar</div>
+      ${stopsHtml}
+    </div>
+  `;
+}
+
+function changeMapDay(delta) {
+  currentMapDay = Math.max(0, Math.min(11, currentMapDay + delta));
+  renderMapTab();
 }
 
 // ===== TRAVEL DATA =====
