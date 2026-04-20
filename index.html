@@ -6,7 +6,7 @@
 <title>🇬🇧 London Trip — Julio 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <style>
   :root {
     --red: #C8102E;
@@ -1790,8 +1790,15 @@ function renderMapTab() {
     </div>
   `;
 
-  // Init Leaflet after DOM is ready
-  setTimeout(() => initLeafletMap(mapId, places, centerLat, centerLng, zoom), 150);
+  // Init Leaflet after DOM is ready — wait for L to be available
+  const tryInit = (attempts) => {
+    if (typeof L !== 'undefined') {
+      initLeafletMap(mapId, places, centerLat, centerLng, zoom);
+    } else if (attempts > 0) {
+      setTimeout(() => tryInit(attempts - 1), 200);
+    }
+  };
+  setTimeout(() => tryInit(10), 150);
 }
 
 let leafletMapInstance = null;
