@@ -1181,7 +1181,7 @@
 <nav class="tabs">
   <button class="tab-btn active" onclick="switchTab('itinerary', this)">📅 Itinerario</button>
   <button class="tab-btn" onclick="switchTab('overview', this)">📊 Resumen</button>
-  <button class="tab-btn" onclick="switchTab('reserve', this)">⚠️ Reservas</button>
+  <button class="tab-btn" onclick="switchTab('reserve', this)">✅ Reservas</button>
   <button class="tab-btn" onclick="switchTab('flights', this)">✈️ Vuelos & Hotel</button>
 </nav>
 
@@ -1239,7 +1239,7 @@
 <!-- TAB: RESERVAS -->
 <div id="tab-reserve" class="view">
   <div class="main">
-    <div class="section-label">Reservas prioritarias — ¡No dejar para después!</div>
+    <div class="section-label">Reservas del viaje — estado actual</div>
     <div class="food-card">
       <div class="food-title">Estado de reservas</div>
       <div id="reserveList"></div>
@@ -1399,7 +1399,7 @@ const DAYS = [
     num: 2, fecha: "Jul 17", label: "17 Jul", theme: "Vistas y Gobierno",
     badge: "Día 2",
     activities: [
-      { name: "London Eye 🌟", tag: "paid", note: "Reservar online — £36 adulto, £33 niño. Vistas de 360° sobre la ciudad", metro: "Waterloo / Westminster", map: "https://maps.google.com/?q=London+Eye" },
+      { name: "London Eye 🌟", tag: "paid", note: "✅ RESERVADO — Order 604902032 · 17 Jul 13:00 · 4 adultos + 2 niños. Llegar directo a la cola a las 13:00. La hora NO es la de abordaje.", metro: "Waterloo / Westminster", map: "https://maps.google.com/?q=London+Eye" },
       { name: "SEA LIFE London Aquarium", tag: "paid", note: "Ideal para los niños — £33 adulto, £28 niño", metro: "Westminster / Waterloo", map: "https://maps.google.com/?q=SEA+LIFE+London+Aquarium" },
       { name: "Big Ben & Casas del Parlamento", tag: "free", note: "Exterior — foto icónica desde Westminster Bridge", metro: "Westminster", map: "https://maps.google.com/?q=Big+Ben+London" },
       { name: "St James's Park", tag: "free", note: "Paseo de 2.8 km — el parque más antiguo de Londres", metro: "St James's Park", map: "https://maps.google.com/?q=St+James%27s+Park+London" },
@@ -1411,15 +1411,19 @@ const DAYS = [
     tip: "Pendiente confirmar horario de cambio de guardia en buckinghampalace.royal.uk"
   },
   {
-    num: 3, fecha: "Jul 18", label: "18 Jul", theme: "Harry Potter 🧙",
-    badge: "Excursión",
+    num: 3, fecha: "Jul 18", label: "18 Jul", theme: "Realeza y Torre",
+    badge: "Día 3",
     activities: [
-      { name: "Warner Bros. Studio Tour — The Making of Harry Potter 🌟🌟", tag: "paid", note: "⚠️ RESERVAR YA — se agota. £56 adulto, £45 niño. Evento especial 'First Year at Hogwarts' (hasta sep 2026 — 25 aniversario)", metro: "Euston → tren a Watford Junction + bus shuttle", map: "https://maps.google.com/?q=Warner+Bros+Studio+Tour+Leavesden" },
-      { name: "Estadio de Wembley (de camino)", tag: "free", note: "Vista exterior del estadio más famoso de Inglaterra", metro: "Wembley Park", map: "https://maps.google.com/?q=Wembley+Stadium+London" }
+      { name: "Torre de Londres 🌟", tag: "paid", note: "✅ RESERVADO — Viator Ref 1406979959 · Conf DVOXMDHF8LSGC · 10:00am · Entrada oeste por Tower Hill. 5 adultos + 2 niños", metro: "Tower Hill (District/Circle)", map: "https://maps.google.com/?q=Tower+of+London" },
+      { name: "Tower Bridge", tag: "paid", note: "£16 adulto, £8 niño — Cruzar el puente y subir a la Exhibition", metro: "Tower Hill / London Bridge", map: "https://maps.google.com/?q=Tower+Bridge+London" },
+      { name: "HMS Belfast", tag: "paid", note: "Buque de guerra interactivo flotante en el Támesis — los niños lo adoran", metro: "London Bridge (Jubilee/Northern)", map: "https://maps.google.com/?q=HMS+Belfast+London" },
+      { name: "Sky Garden", tag: "free", note: "Reservar GRATIS con 3 semanas de antelación — skygarden.london. Vistas espectaculares", metro: "Monument / Bank", map: "https://maps.google.com/?q=Sky+Garden+London" },
+      { name: "St Paul's Cathedral", tag: "paid", note: "£20 adulto, £8 niño — La catedral más emblemática de Londres", metro: "St Paul's (Central)", map: "https://maps.google.com/?q=St+Paul%27s+Cathedral+London" },
+      { name: "The Shard — vista exterior", tag: "free", note: "Alternativa gratuita al mirador: Oblix bar en planta 32 o simplemente la foto desde fuera", metro: "London Bridge", map: "https://maps.google.com/?q=The+Shard+London" }
     ],
-    food: "☕ Café del Studio Tour — Butterbeer 🍺 + fish & chips dentro del estudio\n🍽️ Restaurante temático en el propio estudio",
-    cost: "£56×2 adultos + £45 niño = £157 entradas + £40 shuttle por persona",
-    tip: "Cami: confirmar tipo de entrada + opción transporte. ¡No hay venta en taquilla!"
+    food: "🍖 Bread Street Kitchen (Gordon Ramsay) — ¡Niños ≤10 años comen GRATIS!\n🍳 Bill's London Bridge — All-day, menú niños fish fingers + postre\n🛒 Borough Market — https://boroughmarket.org.uk",
+    cost: "$180 (Entradas Torre + cena). Regreso: Uber Boat desde London Bridge",
+    tip: "Tomen el Uber Boat (barco público) al atardecer — ver la ciudad iluminada desde el Támesis es mágico."
   },
   {
     num: 4, fecha: "Jul 19", label: "19 Jul", theme: "Ciencia y Museos",
@@ -1434,19 +1438,15 @@ const DAYS = [
     tip: "Los tres museos de South Kensington están uno al lado del otro — perfecto para el día."
   },
   {
-    num: 5, fecha: "Jul 20", label: "20 Jul", theme: "Realeza y Torre",
-    badge: "Día 5",
+    num: 5, fecha: "Jul 20", label: "20 Jul", theme: "Harry Potter 🧙",
+    badge: "Excursión",
     activities: [
-      { name: "Torre de Londres 🌟", tag: "paid", note: "£37 adulto, £18.50 niño — Reservar online, horario 9:30am. Las Joyas de la Corona son increíbles", metro: "Tower Hill (District/Circle)", map: "https://maps.google.com/?q=Tower+of+London" },
-      { name: "Tower Bridge", tag: "paid", note: "£16 adulto, £8 niño — Cruzar el puente y subir a la Exhibition", metro: "Tower Hill / London Bridge", map: "https://maps.google.com/?q=Tower+Bridge+London" },
-      { name: "HMS Belfast", tag: "paid", note: "Buque de guerra interactivo flotante en el Támesis — los niños lo adoran", metro: "London Bridge (Jubilee/Northern)", map: "https://maps.google.com/?q=HMS+Belfast+London" },
-      { name: "Sky Garden", tag: "free", note: "Reservar GRATIS con 3 semanas de antelación — skygarden.london. Vistas espectaculares", metro: "Monument / Bank", map: "https://maps.google.com/?q=Sky+Garden+London" },
-      { name: "St Paul's Cathedral", tag: "paid", note: "£20 adulto, £8 niño — La catedral más emblemática de Londres", metro: "St Paul's (Central)", map: "https://maps.google.com/?q=St+Paul%27s+Cathedral+London" },
-      { name: "The Shard — vista exterior", tag: "free", note: "Alternativa gratuita al mirador: Oblix bar en planta 32 o simplemente la foto desde fuera", metro: "London Bridge", map: "https://maps.google.com/?q=The+Shard+London" }
+      { name: "Warner Bros. Studio Tour — The Making of Harry Potter 🌟🌟", tag: "paid", note: "✅ RESERVADO — Booking Ref 7248369 · Lunes 20 Jul · 13:30 · Adult Family Ticket x2 + Child Family Ticket x2 + Adult x2. Llegar 20 min antes. Mostrar e-ticket en el bus shuttle desde Watford Junction", metro: "Euston → tren a Watford Junction + bus shuttle", map: "https://maps.google.com/?q=Warner+Bros+Studio+Tour+Leavesden" },
+      { name: "Estadio de Wembley (de camino)", tag: "free", note: "Vista exterior del estadio más famoso de Inglaterra", metro: "Wembley Park", map: "https://maps.google.com/?q=Wembley+Stadium+London" }
     ],
-    food: "🍖 Bread Street Kitchen (Gordon Ramsay) — ¡Niños ≤10 años comen GRATIS!\n🍳 Bill's London Bridge — All-day, menú niños fish fingers + postre\n🛒 Borough Market — https://boroughmarket.org.uk",
-    cost: "$180 (Entradas Torre + cena). Regreso: Uber Boat desde London Bridge",
-    tip: "Tomen el Uber Boat (barco público) al atardecer — ver la ciudad iluminada desde el Támesis es mágico."
+    food: "☕ Café del Studio Tour — Butterbeer 🍺 + fish & chips dentro del estudio\n🍽️ Restaurante temático en el propio estudio",
+    cost: "Ya pagado — Booking Ref 7248369 · 4 adultos + 2 niños · Family Tickets",
+    tip: "Mostrar el e-ticket también en el bus shuttle desde Watford Junction. Llegar 20 min antes de las 13:30."
   },
   {
     num: 6, fecha: "Jul 21", label: "21 Jul", theme: "Parques y Notting Hill",
@@ -1481,7 +1481,7 @@ const DAYS = [
     num: 8, fecha: "Jul 23", label: "23 Jul", theme: "Cultura y Compras",
     badge: "Día 8",
     activities: [
-      { name: "British Museum 🏛️", tag: "free", note: "Gratuito — Piedra de Roseta, momias egipcias, esculturas del Partenón. ¡Imperdible!", metro: "Russell Square / Holborn", map: "https://maps.google.com/?q=British+Museum+London" },
+      { name: "British Museum 🏛️", tag: "free", note: "✅ RESERVADO — Order 9917669 · Jue 23 Jul · 10:20 · Familia Parra. Gratuito. Lleguen a las 10:20 puntual.", metro: "Russell Square / Holborn", map: "https://maps.google.com/?q=British+Museum+London" },
       { name: "Oxford Street — Compras", tag: "free", note: "La calle de compras más famosa de Europa — 2.5 km de tiendas", metro: "Oxford Circus / Bond Street", map: "https://maps.google.com/?q=Oxford+Street+London" },
       { name: "Hamleys — La juguetería más famosa del mundo", tag: "free", note: "7 plantas de juguetes en Regent Street — los niños alucinarán", metro: "Oxford Circus / Piccadilly Circus", map: "https://maps.google.com/?q=Hamleys+Regent+Street+London" },
       { name: "Bond Street — lujo y vidrieras", tag: "free", note: "Pasar por las tiendas más exclusivas aunque sea a ver", metro: "Bond Street", map: "https://maps.google.com/?q=Bond+Street+London" }
@@ -1510,7 +1510,7 @@ const DAYS = [
     num: 10, fecha: "Jul 25", label: "25 Jul", theme: "Stonehenge & Bath",
     badge: "Excursión",
     activities: [
-      { name: "Tour Stonehenge + Bath — día completo 🌟🌟", tag: "paid", note: "£129 adulto, £99 niño — Evan Evans Tours desde Victoria Coach Station. CON Roman Baths. ~10 horas. Reservar con 2-3 semanas", metro: "Victoria Coach Station (salida del tour)", map: "https://maps.google.com/?q=Stonehenge+Wiltshire+UK" },
+      { name: "Tour Stonehenge + Bath — día completo 🌟🌟", tag: "paid", note: "✅ RESERVADO — Golden Tours Ref KKXJTJ5V · Sáb 25 Jul · Salida 08:00am, tour 08:30am · Classic All Entries (Español) · 4 adultos + 2 niños · £711 total. Punto de encuentro: Bulleid Way, 123-151 Buckingham Palace Rd, Victoria SW1W 9SR", metro: "Victoria Coach Station", map: "https://maps.google.com/?q=Stonehenge+Wiltshire+UK" },
       { name: "Roman Baths — Bath", tag: "paid", note: "Incluido en el tour — Termas romanas del siglo I d.C. Increíblemente bien conservadas", metro: "Bath city center", map: "https://maps.google.com/?q=Roman+Baths+Bath+UK" },
       { name: "Bath Abbey & Pulteney Bridge", tag: "free", note: "La ciudad más bonita de Inglaterra — pasear por sus calles de piedra es un sueño", metro: "Bath city center", map: "https://maps.google.com/?q=Bath+Abbey+Bath+UK" }
     ],
@@ -1539,7 +1539,7 @@ const DAYS = [
     activities: [
       { name: "Estatua de Paddington Bear — Paddington Station", tag: "free", note: "Foto imperdible con el oso más famoso de Inglaterra", metro: "Paddington (Bakerloo/Circle/H&C)", map: "https://maps.google.com/?q=Paddington+Station+London" },
       { name: "Little Venice — Paseo en canal boat 🛶", tag: "paid", note: "A 10 min caminando del hotel hacia el norte. Bote por el canal hasta el Zoo o Camden — los niños lo adoran", metro: "Warwick Avenue (Bakerloo)", map: "https://maps.google.com/?q=Little+Venice+London" },
-      { name: "Madame Tussauds", tag: "paid", note: "£37 adulto, £33 niño — Museo de cera. Incluido en London Pass o Merlin 5-in-1", metro: "Baker Street (múltiples)", map: "https://maps.google.com/?q=Madame+Tussauds+London" },
+      { name: "Madame Tussauds", tag: "paid", note: "✅ RESERVADO — Order 604902032 · 27 Jul 10:30 · 4 adultos + 2 niños (combo con London Eye)", metro: "Baker Street (múltiples)", map: "https://maps.google.com/?q=Madame+Tussauds+London" },
       { name: "Camden Town & Camden Market", tag: "free", note: "El barrio más alternativo y colorido de Londres — rock, arte, street food", metro: "Camden Town (Northern)", map: "https://maps.google.com/?q=Camden+Market+London" },
       { name: "Regent's Park", tag: "free", note: "Último paseo — jardines impecables, rosas en julio son preciosas", metro: "Regent's Park / Camden Town", map: "https://maps.google.com/?q=Regent%27s+Park+London" },
       { name: "Check-out y traslado al aeropuerto ✈️", tag: "walk", note: "Heathrow Express desde Paddington: 15 min, £22-25. O Piccadilly Line: 45-50 min, más económico", metro: "Piccadilly Line directo a Heathrow", map: "https://maps.google.com/?q=Heathrow+Airport+London" }
@@ -1551,15 +1551,20 @@ const DAYS = [
 ];
 
 const RESERVES = [
-  { name: "Warner Bros. Harry Potter Studio Tour", when: "AHORA — abril 2026", urgency: "critical", url: "https://www.wbstudiotour.co.uk/tickets/" },
-  { name: "Sky Garden (gratuito pero cupos limitados)", when: "3 semanas antes del día 5", urgency: "critical", url: "https://skygarden.london" },
-  { name: "Torre de Londres", when: "Mayo 2026", urgency: "high", url: "https://www.hrp.org.uk/tower-of-london/visit/tickets-and-prices/" },
-  { name: "London Eye", when: "Mayo 2026", urgency: "high", url: "https://www.londoneye.com/tickets-and-prices/" },
-  { name: "Stonehenge + Bath Tour (Evan Evans)", when: "Mayo 2026", urgency: "high", url: "https://evanevanstours.com/tours/day-tours-from-london/stonehenge-and-bath/" },
-  { name: "Dishoom (cena — muy demandado)", when: "1-2 semanas antes", urgency: "high", url: "https://www.dishoom.com" },
-  { name: "Excursión a Oxford (tren advance)", when: "2-4 semanas antes", urgency: "med", url: "https://www.gwr.com" },
-  { name: "Greenwich Day Pass (Cutty Sark + Observatory)", when: "1 semana antes", urgency: "med", url: "https://www.rmg.co.uk/plan-your-visit/tickets-prices" },
-  { name: "Madame Tussauds", when: "1 semana antes", urgency: "med", url: "https://www.madametussauds.com/london/tickets/" },
+  { name: "🧙 Warner Bros. Harry Potter Studio Tour", when: "Confirmado ✓ — Lun 20 Jul · 13:30", urgency: "done", ref: "Booking Ref: 7248369 · 4 adultos + 2 niños · Family + Adult tickets", url: "https://www.wbstudiotour.co.uk/tickets/" },
+  { name: "🏰 Torre de Londres + Crown Jewels", when: "Confirmado ✓ — Sáb 18 Jul · 10:00", urgency: "done", ref: "Viator Ref: 1406979959 · Conf: DVOXMDHF8LSGC · 5 adultos + 2 niños · Historic Royal Palaces", url: "https://www.hrp.org.uk/tower-of-london/" },
+  { name: "🎡 London Eye", when: "Confirmado ✓ — Jue 17 Jul · 13:00", urgency: "done", ref: "Order: 604902032 · 4 adultos + 2 niños · Llegar directo a la cola", url: "https://www.londoneye.com" },
+  { name: "🪨 Stonehenge + Bath (Golden Tours)", when: "Confirmado ✓ — Sáb 25 Jul · 08:00 salida", urgency: "done", ref: "Ref: KKXJTJ5V · Classic All Entries Español · 4 adultos + 2 niños · £711 · Buckingham Palace Rd Victoria", url: "https://www.goldentours.com" },
+  { name: "🏛️ Museo Británico (admisión gratuita)", when: "Confirmado ✓ — Jue 23 Jul · 10:20", urgency: "done", ref: "Order: 9917669 · Familia Parra · Gratuito · Tickets: 117349972-977", url: "https://www.britishmuseum.org" },
+  { name: "🎭 Madame Tussauds", when: "Confirmado ✓ — Lun 27 Jul · 10:30", urgency: "done", ref: "Order: 604902032 · Combo con London Eye · 4 adultos + 2 niños", url: "https://www.madametussauds.com/london/" },
+  { name: "🏨 Hotel Familia Valencia — Mornington Kensington", when: "Confirmado ✓ — 16–27 Jul · 11 noches", urgency: "done", ref: "Localizador: 24794515 · Conf: 2383879669 · Santiago Valencia · Desayuno incluido", url: "https://maps.google.com/?q=19+Penywern+Rd+Earls+Court+London" },
+  { name: "🏨 Hotel Familia Parra — Mornington Kensington", when: "Confirmado ✓ — 16–27 Jul · 11 noches", urgency: "done", ref: "Localizador: 24794504 · Conf: 2383878268 · Juan Camilo Parra · Desayuno incluido", url: "https://maps.google.com/?q=19+Penywern+Rd+Earls+Court+London" },
+  { name: "✈️ Vuelos Familia Valencia — Santiago", when: "Confirmado ✓ — 15 Jul MDE → LHR", urgency: "done", ref: "Booking: BEJV34 · AV8405 20:50 + AV120 23:25 · 103,870 millas LifeMiles", url: "https://www.avianca.com" },
+  { name: "✈️ Vuelos Familia Valencia — Camila + Elena", when: "Confirmado ✓ — 15 Jul MDE → LHR", urgency: "done", ref: "Booking: BEVCT7 · AV9337 19:40 + AV120 23:25 · Tkt 134 2152989148/149", url: "https://www.avianca.com" },
+  { name: "✈️ Vuelos Familia Parra — Camilo, Catalina, Maxi", when: "Confirmado ✓ — 15 Jul MDE → LHR", urgency: "done", ref: "Booking: BERSFJ · AV9325 18:55 + AV120 23:25 · Tkt 1342152989225/226/227", url: "https://www.avianca.com" },
+  { name: "⚠️ Sky Garden (pendiente)", when: "Reservar 3 semanas antes — gratuito", urgency: "high", ref: "skygarden.london — Cupos muy limitados en julio", url: "https://skygarden.london" },
+  { name: "⚠️ Dishoom (cena)", when: "Reservar 1-2 semanas antes", urgency: "med", ref: "dishoom.com — Sin reserva puede haber 1h de espera", url: "https://www.dishoom.com" },
+  { name: "⚠️ Excursión Oxford (tren advance)", when: "Reservar 2-4 semanas antes", urgency: "med", ref: "gwr.com — Paddington → Oxford desde £10-15", url: "https://www.gwr.com" },
 ];
 
 // State
@@ -1825,17 +1830,25 @@ function updateGlobalProgress() {
 }
 
 function buildReserves() {
-  const urgClass = { critical: 'urg-critical', high: 'urg-high', med: 'urg-med' };
-  document.getElementById('reserveList').innerHTML = RESERVES.map(r => `
-    <div class="reserve-item">
-      <div class="urgency-dot ${urgClass[r.urgency]}"></div>
-      <div>
-        <div class="reserve-name">${r.name}</div>
-        <div class="reserve-when">⏰ ${r.when}</div>
+  const urgClass = { critical: 'urg-critical', high: 'urg-high', med: 'urg-med', done: 'urg-done' };
+  document.getElementById('reserveList').innerHTML = RESERVES.map(r => {
+    const isDone = r.urgency === 'done';
+    return `
+    <div class="reserve-item" style="${isDone ? 'opacity:0.9;' : ''}">
+      <div class="urgency-dot ${urgClass[r.urgency]}" style="${isDone ? 'background:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,0.2);' : ''}"></div>
+      <div style="flex:1;">
+        <div class="reserve-name" style="${isDone ? 'text-decoration:line-through;color:var(--muted);' : ''}">${r.name}</div>
+        <div class="reserve-when" style="${isDone ? 'color:#10b981;font-weight:600;' : ''}">
+          ${isDone ? '✅' : '⏰'} ${r.when}
+          ${r.ref ? `<span style="color:var(--muted);font-weight:400;"> · ${r.ref}</span>` : ''}
+        </div>
       </div>
-      <a class="reserve-link" href="${r.url}" target="_blank">Reservar →</a>
+      ${isDone
+        ? `<span style="font-size:11px;font-weight:700;color:#10b981;padding:4px 10px;border:1.5px solid #10b981;border-radius:6px;white-space:nowrap;">Reservado ✓</span>`
+        : `<a class="reserve-link" href="${r.url}" target="_blank">Reservar →</a>`
+      }
     </div>
-  `).join('');
+  `}).join('');
 }
 
 function switchTab(tab, btn) {
