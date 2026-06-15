@@ -1183,6 +1183,7 @@
   <button class="tab-btn" onclick="switchTab('overview', this)">📊 Resumen</button>
   <button class="tab-btn" onclick="switchTab('reserve', this)">✅ Reservas</button>
   <button class="tab-btn" onclick="switchTab('flights', this)">✈️ Vuelos & Hotel</button>
+  <button class="tab-btn" onclick="switchTab('map', this)">🗺️ Mapa</button>
 </nav>
 
 <!-- TAB: ITINERARY -->
@@ -1447,6 +1448,21 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- TAB: MAPA -->
+<div id="tab-map" class="view">
+  <div style="padding:12px 16px 0;">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+      <button onclick="changeMapDay(-1)" style="background:var(--navy);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:16px;cursor:pointer;">‹</button>
+      <select id="mapDaySelect" onchange="setMapDay(parseInt(this.value))" style="flex:1;padding:8px 12px;border-radius:8px;border:2px solid var(--border);font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:600;color:var(--navy);background:white;"></select>
+      <button onclick="changeMapDay(1)" style="background:var(--navy);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:16px;cursor:pointer;">›</button>
+    </div>
+    <div id="mapLegend" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;font-size:11px;"></div>
+  </div>
+  <div id="gmap" style="width:100%;height:calc(100vh - 220px);min-height:400px;background:#e8e0d4;display:flex;align-items:center;justify-content:center;">
+    <div style="text-align:center;color:var(--muted);font-size:13px;">Cargando mapa…</div>
   </div>
 </div>
 
@@ -1925,13 +1941,6 @@ function buildReserves() {
   `}).join('');
 }
 
-function switchTab(tab, btn) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
-  btn.classList.add('active');
-}
-
 // ============================================================
 // COUNTDOWN ENGINE
 // ============================================================
@@ -2133,6 +2142,217 @@ renderDayContent();
 updateGlobalProgress();
 buildReserves();
 initCountdown();
+
+// ============================================================
+// GOOGLE MAPS
+// ============================================================
+const GMAPS_KEY = 'AIzaSyAT5Rv7omgai4yBzkT2P6jKt-eqN8R04jo';
+
+const MAP_DAYS = [
+  { label: 'Día 1 · Llegada', color: '#012169', places: [
+    { name: 'Aeropuerto Heathrow', lat: 51.4700, lng: -0.4543 },
+    { name: "Hotel Mornington Kensington — Earl's Court", lat: 51.4902, lng: -0.1954 },
+    { name: "Earl's Court — Paseo barrio", lat: 51.4912, lng: -0.1934 },
+  ]},
+  { label: 'Día 2 · Vistas y Gobierno', color: '#C8102E', places: [
+    { name: 'London Eye', lat: 51.5033, lng: -0.1195 },
+    { name: 'SEA LIFE Aquarium', lat: 51.5021, lng: -0.1196 },
+    { name: 'Big Ben & Casas del Parlamento', lat: 51.4994, lng: -0.1245 },
+    { name: "St James's Park", lat: 51.5025, lng: -0.1352 },
+    { name: 'Buckingham Palace', lat: 51.5014, lng: -0.1419 },
+    { name: '10 Downing Street', lat: 51.5034, lng: -0.1277 },
+  ]},
+  { label: 'Día 3 · Torre de Londres', color: '#7c3aed', places: [
+    { name: 'Torre de Londres', lat: 51.5081, lng: -0.0759 },
+    { name: 'Tower Bridge', lat: 51.5055, lng: -0.0754 },
+    { name: 'HMS Belfast', lat: 51.5064, lng: -0.0816 },
+    { name: 'Sky Garden', lat: 51.5112, lng: -0.0836 },
+    { name: "St Paul's Cathedral", lat: 51.5138, lng: -0.0984 },
+    { name: 'The Shard', lat: 51.5045, lng: -0.0865 },
+  ]},
+  { label: 'Día 4 · Ciencia y Museos', color: '#059669', places: [
+    { name: 'Museo Historia Natural', lat: 51.4967, lng: -0.1764 },
+    { name: 'Museo de la Ciencia', lat: 51.4978, lng: -0.1745 },
+    { name: 'Harrods', lat: 51.4994, lng: -0.1632 },
+  ]},
+  { label: 'Día 5 · Harry Potter 🧙', color: '#92600a', places: [
+    { name: 'Estadio de Wembley', lat: 51.5560, lng: -0.2796 },
+    { name: 'Warner Bros Studio Tour Leavesden', lat: 51.6937, lng: -0.4134 },
+  ]},
+  { label: 'Día 6 · Parques y Notting Hill', color: '#2563eb', places: [
+    { name: 'Hyde Park', lat: 51.5073, lng: -0.1657 },
+    { name: 'Diana Memorial Playground', lat: 51.5058, lng: -0.1877 },
+    { name: 'The Serpentine', lat: 51.5051, lng: -0.1685 },
+    { name: 'Notting Hill', lat: 51.5145, lng: -0.2027 },
+    { name: 'Portobello Road Market', lat: 51.5175, lng: -0.2041 },
+  ]},
+  { label: 'Día 7 · Oxford', color: '#7c3aed', places: [
+    { name: "Platform 9¾ — King's Cross", lat: 51.5320, lng: -0.1233 },
+    { name: 'Oxford — Christ Church College', lat: 51.7503, lng: -1.2558 },
+    { name: 'Bodleian Library Oxford', lat: 51.7539, lng: -1.2543 },
+  ]},
+  { label: 'Día 8 · Cultura y Compras', color: '#C8102E', places: [
+    { name: 'British Museum', lat: 51.5194, lng: -0.1270 },
+    { name: 'Oxford Street', lat: 51.5154, lng: -0.1410 },
+    { name: 'Hamleys — Regent Street', lat: 51.5131, lng: -0.1399 },
+    { name: 'Bond Street', lat: 51.5142, lng: -0.1494 },
+  ]},
+  { label: 'Día 9 · Arte y West End', color: '#012169', places: [
+    { name: 'National Gallery', lat: 51.5089, lng: -0.1283 },
+    { name: 'Trafalgar Square', lat: 51.5080, lng: -0.1281 },
+    { name: 'Piccadilly Circus', lat: 51.5100, lng: -0.1340 },
+    { name: 'London Transport Museum', lat: 51.5117, lng: -0.1228 },
+    { name: 'Covent Garden', lat: 51.5117, lng: -0.1240 },
+    { name: 'LEGO Store Leicester Square', lat: 51.5107, lng: -0.1298 },
+    { name: 'Chinatown London', lat: 51.5113, lng: -0.1315 },
+  ]},
+  { label: 'Día 10 · Stonehenge & Bath', color: '#92600a', places: [
+    { name: 'Victoria Coach Station', lat: 51.4938, lng: -0.1490 },
+    { name: 'Stonehenge', lat: 51.1789, lng: -1.8262 },
+    { name: 'Roman Baths — Bath', lat: 51.3814, lng: -2.3593 },
+    { name: 'Bath Abbey', lat: 51.3816, lng: -2.3582 },
+  ]},
+  { label: 'Día 11 · Greenwich', color: '#059669', places: [
+    { name: 'Embankment Pier', lat: 51.5073, lng: -0.1215 },
+    { name: 'Cutty Sark', lat: 51.4831, lng: -0.0094 },
+    { name: 'Royal Observatory Greenwich', lat: 51.4769, lng: -0.0005 },
+    { name: 'National Maritime Museum', lat: 51.4822, lng: -0.0055 },
+    { name: "Shakespeare's Globe Theatre", lat: 51.5081, lng: -0.0972 },
+    { name: 'South Bank', lat: 51.5055, lng: -0.1137 },
+  ]},
+  { label: 'Día 12 · Último día', color: '#2563eb', places: [
+    { name: 'Paddington Station — Oso Paddington', lat: 51.5154, lng: -0.1755 },
+    { name: 'Little Venice', lat: 51.5213, lng: -0.1877 },
+    { name: "Madame Tussauds", lat: 51.5228, lng: -0.1547 },
+    { name: 'Camden Market', lat: 51.5418, lng: -0.1463 },
+    { name: "Regent's Park", lat: 51.5313, lng: -0.1570 },
+    { name: 'Heathrow Airport — Salida ✈️', lat: 51.4700, lng: -0.4543 },
+  ]},
+];
+
+let gmap = null, gmarkers = [], gpoly = null, ginfowin = null;
+let currentMapDay = 0;
+let gmapsLoaded = false;
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  btn.classList.add('active');
+  if (tab === 'map') initMapTab();
+}
+
+function initMapTab() {
+  // Auto-detect today's day
+  const today = new Date();
+  for (let i = 0; i < DAYS.length; i++) {
+    const d = DAYS[i];
+    const parts = d.fecha.split(' ');
+    const months = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+    const dayDate = new Date(2026, months[parts[1]], parseInt(parts[0]));
+    if (today.toDateString() === dayDate.toDateString()) { currentMapDay = i; break; }
+  }
+  buildMapDaySelect();
+  if (!gmapsLoaded) loadGoogleMaps();
+  else renderGoogleMap();
+}
+
+function buildMapDaySelect() {
+  const sel = document.getElementById('mapDaySelect');
+  sel.innerHTML = MAP_DAYS.map((d, i) => `<option value="${i}" ${i===currentMapDay?'selected':''}>${d.label}</option>`).join('');
+}
+
+function setMapDay(idx) {
+  currentMapDay = idx;
+  renderGoogleMap();
+}
+
+function changeMapDay(dir) {
+  currentMapDay = Math.max(0, Math.min(MAP_DAYS.length - 1, currentMapDay + dir));
+  document.getElementById('mapDaySelect').value = currentMapDay;
+  renderGoogleMap();
+}
+
+function loadGoogleMaps() {
+  const s = document.createElement('script');
+  s.src = `https://maps.googleapis.com/maps/api/js?key=${GMAPS_KEY}&callback=onGmaps`;
+  s.async = true; s.defer = true;
+  document.head.appendChild(s);
+}
+
+window.onGmaps = function() {
+  gmapsLoaded = true;
+  gmap = new google.maps.Map(document.getElementById('gmap'), {
+    zoom: 12, center: { lat: 51.5074, lng: -0.1278 },
+    mapTypeControl: false, streetViewControl: false,
+    styles: [
+      { featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }
+    ]
+  });
+  ginfowin = new google.maps.InfoWindow();
+  renderGoogleMap();
+};
+
+function renderGoogleMap() {
+  if (!gmap) return;
+  // Clear
+  gmarkers.forEach(m => m.setMap(null)); gmarkers = [];
+  if (gpoly) { gpoly.setMap(null); gpoly = null; }
+  ginfowin.close();
+
+  const day = MAP_DAYS[currentMapDay];
+  const color = day.color;
+  const path = [];
+
+  day.places.forEach((place, i) => {
+    const pos = { lat: place.lat, lng: place.lng };
+    path.push(pos);
+
+    const marker = new google.maps.Marker({
+      position: pos, map: gmap,
+      label: { text: String(i + 1), color: 'white', fontWeight: 'bold', fontSize: '13px' },
+      title: place.name,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 18,
+        fillColor: color, fillOpacity: 1,
+        strokeColor: 'white', strokeWeight: 2
+      }
+    });
+
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + ' London')}`;
+    marker.addListener('click', () => {
+      ginfowin.setContent(`
+        <div style="font-family:sans-serif;padding:4px;min-width:160px;">
+          <div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#012169;">${place.name}</div>
+          <a href="${mapsUrl}" target="_blank" style="background:#012169;color:white;padding:5px 10px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:600;">📍 Navegar</a>
+        </div>`);
+      ginfowin.open(gmap, marker);
+    });
+    gmarkers.push(marker);
+  });
+
+  // Polyline route
+  gpoly = new google.maps.Polyline({
+    path, geodesic: true,
+    strokeColor: color, strokeOpacity: 0.6, strokeWeight: 3,
+    map: gmap
+  });
+
+  // Fit bounds
+  const bounds = new google.maps.LatLngBounds();
+  path.forEach(p => bounds.extend(p));
+  gmap.fitBounds(bounds);
+
+  // Legend
+  const legend = document.getElementById('mapLegend');
+  legend.innerHTML = day.places.map((p, i) => `
+    <span style="display:inline-flex;align-items:center;gap:4px;background:white;border:1.5px solid ${color};border-radius:20px;padding:3px 8px;">
+      <span style="background:${color};color:white;border-radius:50%;width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">${i+1}</span>
+      <span style="font-size:10px;color:#1a1a2e;font-weight:500;">${p.name.split('—')[0].split('(')[0].trim()}</span>
+    </span>`).join('');
+}
+
 </script>
 </body>
 </html>
