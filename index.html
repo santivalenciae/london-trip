@@ -695,7 +695,115 @@
     margin: 0 4px;
   }
 
-  /* MOBILE */
+  /* ===== KID MODE ===== */
+  .kid-banner {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+    animation: kidSlideIn 0.5s ease;
+  }
+
+  @keyframes kidSlideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .kid-banner.maxi { background: linear-gradient(135deg, #ff6b00, #ff9a3c); }
+  .kid-banner.elena { background: linear-gradient(135deg, #9b59b6, #e91e8c); }
+
+  .kid-avatar {
+    font-size: 40px;
+    animation: kidBounce 1.5s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes kidBounce {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-8px) rotate(5deg); }
+  }
+
+  .kid-banner-text { flex: 1; }
+
+  .kid-banner-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    line-height: 1.1;
+  }
+
+  .kid-banner-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+    margin-top: 3px;
+    font-weight: 600;
+  }
+
+  .kid-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .kid-star {
+    position: absolute;
+    font-size: 16px;
+    animation: kidStarFloat var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
+    opacity: 0.6;
+  }
+
+  @keyframes kidStarFloat {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+    50% { transform: translateY(-12px) scale(1.3); opacity: 0.9; }
+  }
+
+  .kid-tip-card {
+    margin: 0 0 10px;
+    border-radius: 14px;
+    padding: 14px 16px;
+    border: 3px solid;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kid-tip-card.maxi {
+    background: rgba(255,107,0,0.06);
+    border-color: rgba(255,107,0,0.35);
+  }
+
+  .kid-tip-card.elena {
+    background: rgba(155,89,182,0.06);
+    border-color: rgba(155,89,182,0.35);
+  }
+
+  .kid-tip-title {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .kid-tip-card.maxi .kid-tip-title { color: #ff6b00; }
+  .kid-tip-card.elena .kid-tip-title { color: #9b59b6; }
+
+  .kid-tip-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* person-btn override for kids */
+  .person-btn.kid-maxi.active { background: #ff6b00; border-color: #ff6b00; }
+  .person-btn.kid-elena.active { background: #9b59b6; border-color: #9b59b6; }
+
+  /* ===== END KID MODE ===== */
+
   @media (max-width: 600px) {
     .header-top { padding: 12px 16px; }
     .main { padding: 16px; }
@@ -1010,10 +1118,10 @@
     <button class="person-btn active" onclick="selectPerson('todos', this)">Todos</button>
     <button class="person-btn" onclick="selectPerson('Camilo', this)">Camilo</button>
     <button class="person-btn" onclick="selectPerson('Catalina', this)">Catalina</button>
-    <button class="person-btn" onclick="selectPerson('Maxi', this)">Maxi</button>
+    <button class="person-btn" onclick="selectPerson('Maxi', this)" style="border-color:#ff6b00;color:#ff6b00;">Maxi 🧙</button>
     <button class="person-btn" onclick="selectPerson('Santiago', this)">Santiago</button>
     <button class="person-btn" onclick="selectPerson('Camila', this)">Camila</button>
-    <button class="person-btn" onclick="selectPerson('Elena', this)">Elena</button>
+    <button class="person-btn" onclick="selectPerson('Elena', this)" style="border-color:#9b59b6;color:#9b59b6;">Elena 🌸</button>
   </div>
 </header>
 
@@ -1028,6 +1136,9 @@
     <div class="progress-label">Completado</div>
   </div>
 </div>
+
+<!-- KID BANNER -->
+<div id="kidBanner" style="display:none;"></div>
 
 <!-- COUNTDOWN -->
 <div class="countdown-section" id="countdownSection">
@@ -1464,28 +1575,108 @@ function getCheckKey(dayIdx, actIdx) {
   return `d${dayIdx}_a${actIdx}_${currentPerson}`;
 }
 
+const KID_DATA = {
+  Maxi: {
+    cls: 'maxi',
+    avatar: '🧙',
+    name: '¡Hola Maxi! 🧙',
+    sub: '¡Tu aventura mágica en Londres empieza!',
+    color: '#ff6b00',
+    tips: [
+      '¡Hoy vas a ver el lugar donde filmaron Harry Potter de verdad! Busca la plataforma 9¾ 🚂',
+      '¡El dinosaurio del Museo de Historia Natural es TAN GRANDE que no cabe en una foto! 🦕',
+      '¡Hoy subes a la Torre de Londres donde guardaban a los prisioneros del rey! 🏰',
+      '¡Hoy vas al parque más grande de Londres — puedes alquilar un barco en el lago! 🚣',
+      '¡Oxford es la universidad donde estudió Harry Potter... o sea, donde filmaron! 📚',
+      '¡Hoy vas a la juguetería más grande del mundo — 7 pisos de juguetes! 🎮',
+      '¡Hoy ves cuadros de famosos pintores y mimos en la calle Covent Garden! 🎭',
+      '¡Hoy te paras en el centro exacto del mundo — el meridiano 0°! 🌍',
+      '¡Stonehenge son piedras gigantes de hace 5000 años — nadie sabe quién las puso! 🪨',
+      '¡Hoy vas en barco por el río Támesis — el río más famoso de Londres! ⚓',
+      '¡Último día! Camden tiene el mercado más loco de Londres 🎸',
+      '¡El London Eye es una rueda gigante donde ves toda la ciudad desde arriba! 🎡'
+    ],
+    highlights: ['Warner Bros. Harry Potter Studio 🌟', 'Museo de Historia Natural 🦕', 'Tower of London 🏰', 'Hamleys 7 pisos 🎮', 'Meridiano 0° 🌍', 'Stonehenge 🪨']
+  },
+  Elena: {
+    cls: 'elena',
+    avatar: '🌸',
+    name: '¡Hola Elena! 🌸',
+    sub: '¡Tu aventura mágica en Londres empieza!',
+    color: '#9b59b6',
+    tips: [
+      '¡Hoy llegas a Londres — la ciudad de las princesas, los castillos y el Big Ben! 👑',
+      '¡Hoy subes al London Eye — es como una rueda de la fortuna gigante sobre el río! 🎡',
+      '¡Los sets de Harry Potter son increíbles — vas a ver los vestidos y varitas de verdad! ✨',
+      '¡El museo tiene dinosaurios, ballenas gigantes y mariposas de colores! 🦋',
+      '¡La Torre de Londres tiene las joyas de la Corona — diamantes y coronas reales! 💎',
+      '¡El Diana Playground en Hyde Park es el parque de juegos más especial de Londres! 🌳',
+      '¡Oxford tiene las calles más bonitas del mundo — como un cuento de hadas! 🏰',
+      '¡Hamleys tiene 7 pisos de juguetes — y hay personas que hacen magia dentro! 🪄',
+      '¡Covent Garden tiene artistas callejeros increíbles y la tienda de LEGO gigante! 🎨',
+      '¡Greenwich tiene el punto exacto donde empieza el mundo — te haces la foto! 🌏',
+      '¡Bath es la ciudad más bonita de Inglaterra — toda de piedra dorada! 🌼',
+      '¡Último día en Londres — Camden tiene los puestos de comida más ricos! 🍭'
+    ],
+    highlights: ['London Eye 🎡', 'Harry Potter Studio ✨', 'Diana Playground 🌳', 'Joyas de la Corona 💎', 'Notting Hill 🌸', 'Bath ciudad dorada 🌼']
+  }
+};
+
 function selectPerson(name, btn) {
   currentPerson = name;
-  document.querySelectorAll('.person-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.person-btn').forEach(b => {
+    b.classList.remove('active');
+    b.style.background = '';
+    b.style.borderColor = '';
+    b.style.color = '';
+  });
   btn.classList.add('active');
 
+  const greetingBanner = document.getElementById('greetingBanner');
+  const kidBanner = document.getElementById('kidBanner');
   const greetingName = document.getElementById('greetingName');
   const greetingSub = document.getElementById('greetingSubtitle');
 
-  if (name === 'todos') {
-    greetingName.textContent = '¡Bienvenidos, Familia! 🎉';
-    greetingSub.textContent = 'Londres en 12 días — julio 2026';
+  if (name === 'Maxi' || name === 'Elena') {
+    const k = KID_DATA[name];
+    // Style active button
+    btn.style.background = k.color;
+    btn.style.borderColor = k.color;
+    btn.style.color = 'white';
+
+    greetingBanner.style.display = 'none';
+    kidBanner.style.display = 'block';
+
+    // Build stars
+    const starsHtml = ['⭐','🌟','✨','💫','🎈','🎉'].map((s, i) => 
+      `<span class="kid-star" style="left:${10+i*15}%;top:${20+((i%3)*25)}%;--dur:${2+i*0.4}s;--delay:${i*0.3}s;">${s}</span>`
+    ).join('');
+
+    kidBanner.innerHTML = `
+      <div class="kid-banner ${k.cls}">
+        <div class="kid-stars">${starsHtml}</div>
+        <div class="kid-avatar">${k.avatar}</div>
+        <div class="kid-banner-text">
+          <div class="kid-banner-name">${k.name}</div>
+          <div class="kid-banner-sub">🇬🇧 ${k.sub}</div>
+        </div>
+      </div>
+    `;
   } else {
+    greetingBanner.style.display = '';
+    kidBanner.style.display = 'none';
+    kidBanner.innerHTML = '';
+
     const msgs = {
+      todos: ['¡Bienvenidos, Familia! 🎉', 'Londres en 12 días — julio 2026'],
       Camilo: ['¡Hola Camilo! 🎩', 'Tu guía personal para Londres'],
       Catalina: ['¡Hola Catalina! ✨', 'Tu guía personal para Londres'],
-      Maxi: ['¡Hola Maxi! 🧙', 'Tu guía personal — ¡Harry Potter te espera!'],
       Santiago: ['¡Hola Santiago! 🇬🇧', 'Tu guía personal para Londres'],
       Camila: ['¡Hola Camila! 🌟', 'Tu guía personal para Londres'],
-      Elena: ['¡Hola Elena! 🌸', 'Tu guía personal para Londres']
     };
-    greetingName.textContent = msgs[name][0];
-    greetingSub.textContent = msgs[name][1];
+    const m = msgs[name] || msgs.todos;
+    greetingName.textContent = m[0];
+    greetingSub.textContent = m[1];
   }
 
   renderDayContent();
@@ -1607,6 +1798,14 @@ function renderDayContent() {
     </div>
 
     ${d.tip ? `<div class="tips-card"><div class="tips-title">💡 Tip del día</div><div class="tip-text">${d.tip}</div></div>` : ''}
+    ${(currentPerson === 'Maxi' || currentPerson === 'Elena') ? (() => {
+      const k = KID_DATA[currentPerson];
+      const tipIdx = currentDay % k.tips.length;
+      return `<div class="kid-tip-card ${k.cls}">
+        <div class="kid-tip-title">${k.avatar} Tip para ${currentPerson}</div>
+        <div class="kid-tip-text">${k.tips[tipIdx]}</div>
+      </div>`;
+    })() : ''}
   `;
 }
 
