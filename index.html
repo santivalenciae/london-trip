@@ -1252,100 +1252,177 @@
 <!-- TAB: VUELOS & HOTEL -->
 <div id="tab-flights" class="view">
   <div class="main">
-    <div class="section-label">✈️ Familia Valencia — Vuelos</div>
-    <div style="background:white;border-radius:14px;border:2px solid var(--border);overflow:hidden;margin-bottom:10px;">
-      <div style="background:var(--navy);color:white;padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">IDA · Miércoles 15 Jul 2026 — Reserva BEJV34</div>
-      <div style="padding:14px 16px;">
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);">
-          <div style="background:rgba(1,33,105,0.08);border-radius:8px;padding:6px 10px;font-weight:700;font-size:12px;color:var(--navy);white-space:nowrap;">AV8405</div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:600;">Medellín MDE → Bogotá BOG</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px;">20:50 → 21:50 · 1h · Terminal 1 BOG</div>
-          </div>
-          <div style="text-align:right;font-size:11px;color:var(--muted);">Asiento<br><strong style="color:var(--text);">Santiago</strong></div>
+
+    <!-- HELPER STYLES -->
+    <style>
+      .fl-card { background:white;border-radius:14px;border:2px solid var(--border);overflow:hidden;margin-bottom:10px; }
+      .fl-header { padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:white; }
+      .fl-header.ida { background:var(--navy); }
+      .fl-header.vuelta { background:var(--red); }
+      .fl-row { display:flex;align-items:center;gap:12px;padding:10px 16px; }
+      .fl-row:not(:last-child) { border-bottom:1px solid var(--border); }
+      .fl-num { border-radius:8px;padding:5px 9px;font-weight:700;font-size:12px;white-space:nowrap;flex-shrink:0; }
+      .fl-num.navy { background:rgba(1,33,105,0.08);color:var(--navy); }
+      .fl-num.red { background:rgba(200,16,46,0.08);color:var(--red); }
+      .fl-info { flex:1; }
+      .fl-ruta { font-size:14px;font-weight:600;color:var(--text); }
+      .fl-det { font-size:11px;color:var(--muted);margin-top:2px; }
+      .fl-seat { text-align:right;font-size:11px;color:var(--muted);flex-shrink:0;line-height:1.5; }
+      .fl-seat strong { color:var(--text);font-size:12px; }
+      .fl-alert { border-radius:12px;padding:11px 14px;margin-bottom:14px;font-size:12px; }
+      .fl-alert.gold { background:rgba(201,168,76,0.1);border:1.5px solid rgba(201,168,76,0.4);color:var(--text); }
+      .fl-alert.green { background:rgba(16,185,129,0.06);border:1.5px solid rgba(16,185,129,0.25);color:var(--text); }
+    </style>
+
+    <!-- ═══ SANTIAGO VALENCIA ═══ -->
+    <div class="section-label">✈️ Santiago Valencia — BEJV34 (millas)</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+      <div style="background:var(--navy);color:white;border-radius:8px;padding:6px 14px;font-size:13px;font-weight:700;letter-spacing:1px;">BEJV34</div>
+      <div style="font-size:12px;color:var(--muted);">Código de reserva Avianca · LifeMiles 00945240925</div>
+    </div>
+    <div class="fl-card">
+      <div class="fl-header ida">IDA · Miérc 15 Jul 2026 · Booking BEJV34 · 103,870 millas LifeMiles</div>
+      <div class="fl-row">
+        <div class="fl-num navy">AV8405</div>
+        <div class="fl-info">
+          <div class="fl-ruta">Medellín MDE → Bogotá BOG</div>
+          <div class="fl-det">20:50 → 21:50 · 1h · T1 BOG</div>
         </div>
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;">
-          <div style="background:rgba(200,16,46,0.08);border-radius:8px;padding:6px 10px;font-weight:700;font-size:12px;color:var(--red);white-space:nowrap;">AV120</div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:600;">Bogotá BOG → Londres LHR T2</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px;">23:25 → 16 Jul 15:35 · 10h10m · 🌙 vuelo nocturno</div>
-          </div>
-          <div style="text-align:right;font-size:11px;color:var(--muted);">Asiento<br><strong style="color:var(--text);">Santiago</strong></div>
+        <div class="fl-seat">Sin asiento<br>asignado</div>
+      </div>
+      <div class="fl-row">
+        <div class="fl-num red">AV120</div>
+        <div class="fl-info">
+          <div class="fl-ruta">Bogotá BOG → Londres LHR T2</div>
+          <div class="fl-det">23:25 → 16 Jul 15:35 · 10h10m · 🌙 nocturno</div>
         </div>
+        <div class="fl-seat">Sin asiento<br>asignado</div>
+      </div>
+    </div>
+    <div class="fl-card">
+      <div class="fl-header vuelta">REGRESO · Lunes 27 Jul 2026 · Booking BEJV34</div>
+      <div class="fl-row">
+        <div class="fl-num red">AV121</div>
+        <div class="fl-info">
+          <div class="fl-ruta">Londres LHR T2 → Bogotá BOG</div>
+          <div class="fl-det">22:05 → 28 Jul 03:10 · 11h05m · 🌙 nocturno</div>
+        </div>
+        <div class="fl-seat">Sin asiento<br>asignado</div>
+      </div>
+      <div class="fl-row">
+        <div class="fl-num navy">AV9252</div>
+        <div class="fl-info">
+          <div class="fl-ruta">Bogotá BOG → Medellín MDE</div>
+          <div class="fl-det">05:20 → 06:20 · 1h</div>
+        </div>
+        <div class="fl-seat">Sin asiento<br>asignado</div>
       </div>
     </div>
 
-    <div style="background:white;border-radius:14px;border:2px solid var(--border);overflow:hidden;margin-bottom:10px;">
-      <div style="background:var(--red);color:white;padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">REGRESO · Lunes 27 Jul 2026 — Reserva BEJV34</div>
-      <div style="padding:14px 16px;">
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);">
-          <div style="background:rgba(200,16,46,0.08);border-radius:8px;padding:6px 10px;font-weight:700;font-size:12px;color:var(--red);white-space:nowrap;">AV121</div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:600;">Londres LHR T2 → Bogotá BOG</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px;">22:05 → 28 Jul 03:10 · 11h05m · 🌙 vuelo nocturno</div>
-          </div>
-          <div style="text-align:right;font-size:11px;color:var(--muted);">Camila: 09G<br>Elena: 09J</div>
+    <!-- ═══ CAMILA + ELENA ═══ -->
+    <div class="section-label">✈️ Camila Montoya + Elena Valencia — BEVCT7</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+      <div style="background:var(--navy);color:white;border-radius:8px;padding:6px 14px;font-size:13px;font-weight:700;letter-spacing:1px;">BEVCT7</div>
+      <div style="font-size:12px;color:var(--muted);">Código de reserva Avianca · Tkt 134 2152989148 / 149</div>
+    </div>
+    <div class="fl-card">
+      <div class="fl-header ida">IDA · Miérc 15 Jul 2026 · Booking BEVCT7 · Tkt 134 2152989148 / 149</div>
+      <div class="fl-row">
+        <div class="fl-num navy">AV9337</div>
+        <div class="fl-info">
+          <div class="fl-ruta">Medellín MDE → Bogotá BOG</div>
+          <div class="fl-det">19:40 → 20:40 · 1h · T1 BOG</div>
         </div>
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;">
-          <div style="background:rgba(1,33,105,0.08);border-radius:8px;padding:6px 10px;font-weight:700;font-size:12px;color:var(--navy);white-space:nowrap;">AV9252</div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:600;">Bogotá BOG → Medellín MDE</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px;">05:20 → 06:20 · 1h · Camila: 04D · Elena: 04E</div>
-          </div>
+        <div class="fl-seat"><strong>Camila</strong> 11C<br><strong>Elena</strong> 11B</div>
+      </div>
+      <div class="fl-row">
+        <div class="fl-num red">AV120</div>
+        <div class="fl-info">
+          <div class="fl-ruta">Bogotá BOG → Londres LHR T2</div>
+          <div class="fl-det">23:25 → 16 Jul 15:35 · 10h10m · 🌙 nocturno</div>
         </div>
+        <div class="fl-seat"><strong>Camila</strong> 08G<br><strong>Elena</strong> 08J</div>
+      </div>
+    </div>
+    <div class="fl-card">
+      <div class="fl-header vuelta">REGRESO · Lunes 27 Jul 2026 · Booking BEVCT7</div>
+      <div class="fl-row">
+        <div class="fl-num red">AV121</div>
+        <div class="fl-info">
+          <div class="fl-ruta">Londres LHR T2 → Bogotá BOG</div>
+          <div class="fl-det">22:05 → 28 Jul 03:10 · 11h05m · 🌙 nocturno</div>
+        </div>
+        <div class="fl-seat"><strong>Camila</strong> 09G<br><strong>Elena</strong> 09J</div>
+      </div>
+      <div class="fl-row">
+        <div class="fl-num navy">AV9252</div>
+        <div class="fl-info">
+          <div class="fl-ruta">Bogotá BOG → Medellín MDE</div>
+          <div class="fl-det">05:20 → 06:20 · 1h</div>
+        </div>
+        <div class="fl-seat"><strong>Camila</strong> 04D<br><strong>Elena</strong> 04E</div>
       </div>
     </div>
 
-    <div style="background:rgba(201,168,76,0.1);border:1.5px solid rgba(201,168,76,0.4);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--text);">
-      ⚠️ <strong>Alerta MDE:</strong> Santiago vuela en <strong>AV8405 20:50</strong> (millas, BEJV34) · Camila + Elena en <strong>AV9337 19:40</strong> (BEVCT7). Salidas distintas — coordinar llegada a BOG.
+    <div class="fl-alert gold">
+      ⚠️ <strong>¡Ojo salida MDE!</strong> Parra salen a las 18:55 (AV9325) · Camila+Elena a las 19:40 (AV9337) · Santiago a las 20:50 (AV8405). Los tres llegan a BOG antes de las 22:00 y toman el mismo AV120 a las 23:25.
     </div>
 
-    <div class="section-label">✈️ Familia Parra — Vuelos</div>
-    <div style="background:white;border-radius:14px;border:2px solid var(--border);overflow:hidden;margin-bottom:10px;">
-      <div style="background:var(--navy);color:white;padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">IDA · Miércoles 15 Jul 2026 — Reserva BERSFJ</div>
-      <div style="padding:14px 16px;">
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);">
-          <div style="background:rgba(1,33,105,0.08);border-radius:8px;padding:6px 10px;font-weight:700;font-size:12px;color:var(--navy);white-space:nowrap;">AV9325</div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:600;">Medellín MDE → Bogotá BOG</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px;">18:55 → 19:55 · 1h · Camilo 15A · Catalina 15B · Maxi 15C</div>
-          </div>
+    <!-- ═══ FAMILIA PARRA ═══ -->
+    <div class="section-label">✈️ Familia Parra — BERSFJ</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+      <div style="background:var(--navy);color:white;border-radius:8px;padding:6px 14px;font-size:13px;font-weight:700;letter-spacing:1px;">BERSFJ</div>
+      <div style="font-size:12px;color:var(--muted);">Código de reserva Avianca · Tkt 1342152989225 / 226 / 227</div>
+    </div>
+    <div class="fl-card">
+      <div class="fl-header ida">IDA · Miérc 15 Jul 2026 · Booking BERSFJ · Tkt 1342152989225 / 226 / 227</div>
+      <div class="fl-row">
+        <div class="fl-num navy">AV9325</div>
+        <div class="fl-info">
+          <div class="fl-ruta">Medellín MDE → Bogotá BOG</div>
+          <div class="fl-det">18:55 → 19:55 · 1h · T1 BOG</div>
         </div>
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;">
-          <div style="background:rgba(200,16,46,0.08);border-radius:8px;padding:6px 10px;font-weight:700;font-size:12px;color:var(--red);white-space:nowrap;">AV120</div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:600;">Bogotá BOG → Londres LHR T2</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px;">23:25 → 16 Jul 15:35 · 10h10m · Camilo 9A · Catalina 9B · Maxi 9C</div>
-          </div>
+        <div class="fl-seat"><strong>Camilo</strong> 15A · <strong>Catalina</strong> 15B<br><strong>Maxi</strong> 15C</div>
+      </div>
+      <div class="fl-row">
+        <div class="fl-num red">AV120</div>
+        <div class="fl-info">
+          <div class="fl-ruta">Bogotá BOG → Londres LHR T2</div>
+          <div class="fl-det">23:25 → 16 Jul 15:35 · 10h10m · 🌙 nocturno</div>
         </div>
+        <div class="fl-seat"><strong>Camilo</strong> 9A · <strong>Catalina</strong> 9B<br><strong>Maxi</strong> 9C</div>
+      </div>
+    </div>
+    <div class="fl-card">
+      <div class="fl-header vuelta">REGRESO · Lunes 27 Jul 2026 · Booking BERSFJ</div>
+      <div class="fl-row">
+        <div class="fl-num red">AV121</div>
+        <div class="fl-info">
+          <div class="fl-ruta">Londres LHR T2 → Bogotá BOG</div>
+          <div class="fl-det">22:05 → 28 Jul 03:10 · 11h05m · 🌙 nocturno</div>
+        </div>
+        <div class="fl-seat"><strong>Camilo</strong> 10A · <strong>Catalina</strong> 10B<br><strong>Maxi</strong> 10C</div>
+      </div>
+      <div class="fl-row">
+        <div class="fl-num navy">AV9252</div>
+        <div class="fl-info">
+          <div class="fl-ruta">Bogotá BOG → Medellín MDE</div>
+          <div class="fl-det">05:20 → 06:20 · 1h</div>
+        </div>
+        <div class="fl-seat"><strong>Camilo</strong> 5A · <strong>Catalina</strong> 5B<br><strong>Maxi</strong> 5C</div>
       </div>
     </div>
 
-    <div style="background:white;border-radius:14px;border:2px solid var(--border);overflow:hidden;margin-bottom:10px;">
-      <div style="background:var(--red);color:white;padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">REGRESO · Lunes 27 Jul 2026 — Reserva BERSFJ</div>
-      <div style="padding:14px 16px;">
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);">
-          <div style="background:rgba(200,16,46,0.08);border-radius:8px;padding:6px 10px;font-weight:700;font-size:12px;color:var(--red);white-space:nowrap;">AV121</div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:600;">Londres LHR T2 → Bogotá BOG</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px;">22:05 → 28 Jul 03:10 · 11h05m · Camilo 10A · Catalina 10B · Maxi 10C</div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;">
-          <div style="background:rgba(1,33,105,0.08);border-radius:8px;padding:6px 10px;font-weight:700;font-size:12px;color:var(--navy);white-space:nowrap;">AV9252</div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:600;">Bogotá BOG → Medellín MDE</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px;">05:20 → 06:20 · 1h · Camilo 5A · Catalina 5B · Maxi 5C</div>
-          </div>
-        </div>
-      </div>
+    <div class="fl-alert green">
+      ✅ Los 6 viajeros llegan juntos en <strong>AV120</strong> a las 15:35 del 16 Jul · Terminal 2 Heathrow. Regresan todos en <strong>AV121</strong> el 27 Jul 22:05.
     </div>
 
+    <!-- ═══ HOTEL ═══ -->
     <div class="section-label">🏨 Hotel — Ambas familias</div>
     <div style="background:white;border-radius:14px;border:2px solid var(--border);overflow:hidden;margin-bottom:10px;">
       <div style="background:var(--navy);color:white;padding:14px 16px;">
         <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">Mornington London Kensington</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:2px;">BW Premier Collection · Earl's Court</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:2px;">BW Premier Collection · Earl's Court · 2 habitaciones</div>
       </div>
       <div style="padding:16px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
@@ -1358,21 +1435,18 @@
             <div style="font-size:16px;font-weight:700;color:var(--red);margin-top:3px;">27 Jul · 11:00</div>
           </div>
         </div>
-        <div style="font-size:13px;color:var(--text);line-height:1.7;">
+        <div style="font-size:13px;color:var(--text);line-height:1.8;">
           <div style="margin-bottom:6px;">📍 <strong>19-21 Penywern Rd, Earl's Court, London</strong></div>
-          <div style="margin-bottom:6px;">🛏️ Superior Room, 1 Queen Bed + Sofabed · 2 adultos + 1 menor (9 años)</div>
-          <div style="margin-bottom:6px;">🍳 Desayuno incluido (breakfast ~£15/persona si no está incluido)</div>
-          <div style="margin-bottom:6px;">🔖 Localizador Familia Valencia: <strong>24794515</strong></div>
-          <div style="margin-bottom:6px;">📞 +1 407 473 7873 · 11 noches</div>
-          <div style="margin-bottom:6px;">🚇 Earl's Court — Piccadilly Line directo a Heathrow (45 min)</div>
+          <div style="margin-bottom:6px;">🛏️ 2 habitaciones · Superior Room, Queen Bed + Sofabed · 2 adultos + 1 menor c/u</div>
+          <div style="margin-bottom:6px;">🍳 Desayuno incluido · 11 noches</div>
+          <div style="margin-bottom:6px;">🔖 <strong>Familia Valencia:</strong> Localizador 24794515 · Conf 2383879669 · Santiago Valencia</div>
+          <div style="margin-bottom:6px;">🔖 <strong>Familia Parra:</strong> Localizador 24794504 · Conf 2383878268 · Juan Camilo Parra</div>
+          <div style="margin-bottom:6px;">🚇 Earl's Court → Heathrow en Piccadilly Line directo (45 min)</div>
         </div>
         <a class="map-btn" href="https://maps.google.com/?q=19+Penywern+Rd+Earls+Court+London" target="_blank" style="margin-top:10px;">📍 Ver en Google Maps</a>
       </div>
     </div>
 
-    <div style="background:rgba(16,185,129,0.06);border:1.5px solid rgba(16,185,129,0.25);border-radius:12px;padding:12px 16px;font-size:12px;color:var(--text);margin-bottom:10px;">
-      ✅ <strong>Vuelos confirmados para ambas familias.</strong> El mismo vuelo AV120 BOG→LHR y AV121 LHR→BOG · Llegan juntos a las 15:35 del 16 Jul.
-    </div>
   </div>
 </div>
 
